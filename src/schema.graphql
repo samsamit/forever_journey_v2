@@ -1,0 +1,11 @@
+﻿type User {
+  username: String! @id
+  characters: [Character] @hasInverse(field: user)
+}
+
+type Character {
+  id: ID!
+  name: String!
+  race: String!
+  user: User!
+}
