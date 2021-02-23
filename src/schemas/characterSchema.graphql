@@ -1,0 +1,6 @@
+type Character {
+  id: ID!
+  name: String!
+  race: String!
+  user: User!
+}

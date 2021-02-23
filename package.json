@@ -3,17 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.3.11",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.7.1",
     "apollo-boost": "^0.4.9",
     "graphql": "^15.5.0",
     "graphql-tag": "^2.11.0",
-    "react": "^17.0.1",
     "react-apollo": "^3.1.5",
     "react-apollo-hooks": "^0.5.0",
+    "@types/jest": "^26.0.20",
+    "@types/node": "^12.20.1",
+    "@types/react": "^17.0.2",
+    "@types/react-dom": "^17.0.1",
+    "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.2",
+    "typescript": "^4.1.5",
     "web-vitals": "^1.1.0"
   },
   "scripts": {
@@ -21,7 +27,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "codegen": "graphql-codegen --config codegen.yml"
+    "uploadSchema": "rm src/schemas/schema.graphql && cat src/schemas/*.graphql >> src/schemas/schema.graphql && curl -X POST localhost:8080/admin/schema --data-binary \"@src/schemas/schema.graphql\"",
+    "typegen": "apollo codegen:generate --endpoint=http://localhost:8080/graphql  --target=typescript --includes=\"src/controllers/**/*.{ts, tsx}\" types"
   },
   "eslintConfig": {
     "extends": [
@@ -43,8 +50,9 @@
   },
   "devDependencies": {
     "@graphql-codegen/cli": "1.20.1",
-    "@graphql-codegen/typescript-operations": "1.17.14",
     "@graphql-codegen/typescript": "1.21.0",
-    "@graphql-codegen/typescript-react-apollo": "2.2.1"
+    "@graphql-codegen/typescript-operations": "1.17.14",
+    "@graphql-codegen/typescript-react-apollo": "2.2.1",
+    "@types/graphql": "^14.5.0"
   }
 }

@@ -1,0 +1,4 @@
+type User {
+  username: String! @id
+  characters: [Character]! @hasInverse(field: user)
+}
