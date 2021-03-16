@@ -1,0 +1,4 @@
+type ErrorList {
+  password: String
+  username: String
+}

@@ -1,9 +1,53 @@
 import { gql } from "@apollo/client";
 
-export const GET_ALL_CHARACTERS = gql`
-  query ListChars($user: String!) {
+export const CHARACTERS_GET_ALL = gql`
+  query GetAllCharacters($user: String!) {
     getUser(username: $user) {
       characters {
+        id
+        name
+        race
+      }
+    }
+  }
+`;
+
+export const CHARACTERS_ADD = gql`
+mutation addCharacter($name: String!, $race: String!, $owner: UserRef!){
+    addCharacter(input: [
+      {
+        name: $name
+        race: $race
+        owner: $owner
+      },
+    ]){
+      character{
+        id
+        name
+        race
+        owner{
+          username
+        }
+      }
+    }
+  }
+`;
+
+export const CHARACTERS_DELETE = gql`
+mutation deleteCharacter($id: ID!){
+    deleteCharacter(filter: {id: [$id]}){
+      character{
+        name
+      }
+    }
+  }
+`;
+
+
+export const CHARACTERS_EDIT = gql`
+mutation editCharacter($patch: UpdateCharacterInput!){
+    updateCharacter(input:$patch){
+      character{
         name
         race
       }

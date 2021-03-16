@@ -3,6 +3,7 @@ module.exports = {
         service: {
             name: "ForeverJourney",
             url: "http://localhost:8080/graphql"
+            
         }
     }
 }

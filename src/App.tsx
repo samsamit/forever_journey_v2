@@ -1,34 +1,23 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import { gql, useQuery } from "@apollo/client";
-import { ListChars } from "./types/ListChars";
-import { GET_ALL_CHARACTERS } from "./controllers/character/characterController";
-import { ListCharsVariables } from "./controllers/character/types/ListChars";
+import { Switch, Route } from "react-router-dom";
+import { NavBar } from "./components/NavBar";
+import { Home } from "./pages/Home";
+import { CharacterPage } from "./pages/CharacterPage";
+import { AdminPage } from "./pages/AdminPage";
+import { Signup } from "./pages/Signup";
 
 function App() {
-  const { data, loading, error } = useQuery<ListChars, ListCharsVariables>(
-    GET_ALL_CHARACTERS,
-    { variables: { user: "samsam" } }
-  );
-  console.log(data);
-  if (loading) return <p>Loading...</p>;
-  const charList = (
-    <ul>
-      {data &&
-        data!.getUser!.characters.map((char: any, i: any) => (
-          <li key={i}>
-            <h2>{char.name}</h2>
-            <h3>{char.race}</h3>
-          </li>
-        ))}
-    </ul>
-  );
   return (
     <div className="App">
+      <NavBar />
       <header className="App-header">
-        {error && <p>{}error</p>}
-        {charList}
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/signup" component={Signup} />
+          <Route exact path="/character" component={CharacterPage} />
+          <Route exact path="/admin" component={AdminPage} />
+        </Switch>
       </header>
     </div>
   );

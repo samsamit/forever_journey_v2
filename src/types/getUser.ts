@@ -4,24 +4,25 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: ListChars
+// GraphQL query operation: getUser
 // ====================================================
 
-export interface ListChars_getUser_characters {
+export interface getUser_getUser_characters {
   __typename: "Character";
+  id: string;
   name: string;
   race: string;
 }
 
-export interface ListChars_getUser {
+export interface getUser_getUser {
   __typename: "User";
-  characters: (ListChars_getUser_characters | null)[];
+  characters: (getUser_getUser_characters | null)[] | null;
 }
 
-export interface ListChars {
-  getUser: ListChars_getUser | null;
+export interface getUser {
+  getUser: getUser_getUser | null;
 }
 
-export interface ListCharsVariables {
+export interface getUserVariables {
   user: string;
 }

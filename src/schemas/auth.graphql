@@ -1,0 +1,25 @@
+type authType {
+  id: ID!
+  masterKey: masterKey
+  username: String
+  token: String
+}
+
+type masterKey {
+  key: String!
+}
+
+type Mutation {
+  signup(
+    username: String!
+    email: String!
+    password: String!
+    password2: String!
+  ): signupPayload! @lambda
+}
+
+type signupPayload {
+  username: String
+  token: String
+  errors: ErrorList
+}

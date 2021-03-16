@@ -4,20 +4,25 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.3.11",
+    "@material-ui/core": "^4.11.3",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.7.1",
-    "apollo-boost": "^0.4.9",
-    "graphql": "^15.5.0",
-    "graphql-tag": "^2.11.0",
-    "react-apollo": "^3.1.5",
-    "react-apollo-hooks": "^0.5.0",
     "@types/jest": "^26.0.20",
     "@types/node": "^12.20.1",
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",
+    "apollo-boost": "^0.4.9",
+    "graphql": "^15.5.0",
+    "graphql-tag": "^2.11.0",
+    "jsonwebtoken": "^8.5.1",
+    "mdi-react": "^7.4.0",
+    "notistack": "^1.0.5",
     "react": "^17.0.1",
+    "react-apollo": "^3.1.5",
+    "react-apollo-hooks": "^0.5.0",
     "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
     "typescript": "^4.1.5",
     "web-vitals": "^1.1.0"
@@ -27,8 +32,11 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "uploadSchema": "rm src/schemas/schema.graphql && cat src/schemas/*.graphql >> src/schemas/schema.graphql && curl -X POST localhost:8080/admin/schema --data-binary \"@src/schemas/schema.graphql\"",
-    "typegen": "apollo codegen:generate --endpoint=http://localhost:8080/graphql  --target=typescript --includes=\"src/controllers/**/*.{ts, tsx}\" types"
+    "dgraph": "docker run -it -p 8080:8080 dgraph/standalone:master",
+    "dgraphLambda": "docker run -d -it --rm -p 8686:8686 -v dgraphLambdaScripts.js:/app/script.js -e DGRAPH_URL=http://host.docker.internal:8080 dgraph/dgraph-lambda",
+    "typegen": "apollo codegen:generate --endpoint=http://localhost:8080/graphql  --target=typescript --includes=\"src/controllers/**/*.{ts, tsx}\" --outputFlat src/types",
+    "schema": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./dgraphSchema.ps1",
+    "lambda": "npx webpack --config webpack.config.js && docker restart FJLambda"
   },
   "eslintConfig": {
     "extends": [
@@ -53,6 +61,9 @@
     "@graphql-codegen/typescript": "1.21.0",
     "@graphql-codegen/typescript-operations": "1.17.14",
     "@graphql-codegen/typescript-react-apollo": "2.2.1",
-    "@types/graphql": "^14.5.0"
+    "@types/graphql": "^14.5.0",
+    "@types/react-router-dom": "^5.1.7",
+    "webpack": "4.44.2",
+    "webpack-cli": "^4.5.0"
   }
 }

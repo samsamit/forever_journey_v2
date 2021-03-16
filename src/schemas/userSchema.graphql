@@ -1,4 +1,13 @@
-type User {
+type User @secret(field: "password") {
   username: String! @id
-  characters: [Character]! @hasInverse(field: user)
+  email: String!
+  characters: [Character] @hasInverse(field: owner)
+  role: UserRole! @search
 }
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+# Dgraph.Authorization {"VerificationKey":"YourSecretKey","Header":"auth","Namespace":"https://localhost:8080/jwt/claims","Algo":"HS256"}

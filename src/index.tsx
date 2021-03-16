@@ -3,19 +3,45 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+import {
+  ApolloProvider,
+  ApolloClient,
+  InMemoryCache,
+  createHttpLink,
+} from "@apollo/client";
+import { BrowserRouter as Router } from "react-router-dom";
+import { setContext } from "@apollo/client/link/context";
+import { SnackbarProvider } from "notistack";
+
+const httpLink = createHttpLink({
+  uri: "http://localhost:8080/graphql",
+});
+
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = localStorage.getItem("token");
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      "X-Auth-Token": token ? token : "",
+    },
+  };
+});
 
 const client = new ApolloClient({
-  uri: "http://localhost:8080/graphql",
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ApolloProvider client={client}>
-      <App />
-    </ApolloProvider>
-  </React.StrictMode>,
+  <ApolloProvider client={client}>
+    <SnackbarProvider maxSnack={5} preventDuplicate>
+      <Router>
+        <App />
+      </Router>
+    </SnackbarProvider>
+  </ApolloProvider>,
   document.getElementById("root")
 );
 

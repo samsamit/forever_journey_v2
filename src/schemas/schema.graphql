@@ -1,10 +1,48 @@
+type authType {
+  id: ID!
+  masterKey: masterKey
+  username: String
+  token: String
+}
+
+type masterKey {
+  key: String!
+}
+
+type Mutation {
+  signup(
+    username: String!
+    email: String!
+    password: String!
+    password2: String!
+  ): signupPayload! @lambda
+}
+
+type signupPayload {
+  username: String
+  token: String
+  errors: ErrorList
+}
 type Character {
   id: ID!
   name: String!
   race: String!
-  user: User!
+  owner: User! @hasInverse(field: characters)
 }
-type User {
+type ErrorList {
+  password: String
+  username: String
+}
+type User @secret(field: "password") {
   username: String! @id
-  characters: [Character]! @hasInverse(field: user)
+  email: String!
+  characters: [Character] @hasInverse(field: owner)
+  role: UserRole! @search
 }
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+# Dgraph.Authorization {"VerificationKey":"YourSecretKey","Header":"auth","Namespace":"https://localhost:8080/jwt/claims","Algo":"HS256"}
