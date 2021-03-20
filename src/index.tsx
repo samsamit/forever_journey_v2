@@ -12,6 +12,10 @@ import {
 import { BrowserRouter as Router } from "react-router-dom";
 import { setContext } from "@apollo/client/link/context";
 import { SnackbarProvider } from "notistack";
+import { store } from "./GlobalState/store";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
 
 const httpLink = createHttpLink({
   uri: "http://localhost:8080/graphql",
@@ -34,13 +38,19 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+let persistor = persistStore(store);
+
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <SnackbarProvider maxSnack={5} preventDuplicate>
-      <Router>
-        <App />
-      </Router>
-    </SnackbarProvider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <SnackbarProvider maxSnack={5} preventDuplicate>
+          <Router>
+            <App />
+          </Router>
+        </SnackbarProvider>
+      </PersistGate>
+    </Provider>
   </ApolloProvider>,
   document.getElementById("root")
 );
@@ -49,3 +59,6 @@ ReactDOM.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+function createBrowserHistory() {
+  throw new Error("Function not implemented.");
+}

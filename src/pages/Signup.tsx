@@ -9,7 +9,6 @@ import {
   Card,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import { UserRef } from "../types/globalTypes";
 import AccountCircleIcon from "mdi-react/AccountCircleIcon";
 import AtIcon from "mdi-react/AtIcon";
 import LockIcon from "mdi-react/LockIcon";
@@ -19,6 +18,7 @@ import { SIGNUP } from "../controllers/authController";
 import { singup, singupVariables } from "../types/singup";
 import { useSnackbar } from "notistack";
 import { Redirect } from "react-router";
+import { Link } from "react-router-dom";
 const useStyles = makeStyles({
   margin: {
     margin: "20px",
@@ -143,6 +143,9 @@ export const Signup = () => {
           <Button color="primary" variant="outlined" type="submit">
             SignUp
           </Button>
+          <Link to="/login">
+            <Typography variant="h6">login</Typography>
+          </Link>
         </Grid>
       </form>
     </Card>

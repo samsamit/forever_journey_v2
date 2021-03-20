@@ -1,3 +1,4 @@
+import { useLazyQuery } from "@apollo/client";
 import {
   Card,
   Grid,
@@ -6,17 +7,17 @@ import {
   InputAdornment,
   Button,
   makeStyles,
+  LinearProgress,
 } from "@material-ui/core";
 import AccountCircleIcon from "mdi-react/AccountCircleIcon";
-import AtIcon from "mdi-react/AtIcon";
 import LockIcon from "mdi-react/LockIcon";
-import LockOutlineIcon from "mdi-react/LockOutlineIcon";
 import { useSnackbar } from "notistack";
-import React, { useState } from "react";
-import { useMutation } from "react-apollo";
-import { Redirect } from "react-router-dom";
-import { SIGNUP } from "../controllers/authController";
-import { singup, singupVariables } from "../types/singup";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link, Redirect, useHistory } from "react-router-dom";
+import { LOGIN } from "../controllers/authController";
+import { LOGIN_USER } from "../GlobalState/Reducers/UserReducer";
+import { login, loginVariables } from "../types/login";
 
 const useStyles = makeStyles({
   margin: {
@@ -25,19 +26,15 @@ const useStyles = makeStyles({
 });
 
 export const Login = () => {
+  const dispatch = useDispatch();
+  let history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
-  const [signUp, { loading, error, data }] = useMutation<
-    singup,
-    singupVariables
-  >(SIGNUP);
-  const [confpasswordError, setconfpasswordError] = useState<string | null>(
-    null
+  const [login, { loading, error, data }] = useLazyQuery<login, loginVariables>(
+    LOGIN
   );
-  const [formData, setformData] = useState<singupVariables>({
-    email: "",
+  const [formData, setformData] = useState<loginVariables>({
     password: "",
-    password2: "",
     username: "",
   });
 
@@ -47,29 +44,36 @@ export const Login = () => {
 
   const onSubmit = (e: any) => {
     e.preventDefault();
-    setconfpasswordError(null);
     console.log(formData);
-    if (formData.password === formData.password2)
-      signUp({ variables: formData });
-    else setconfpasswordError("Passwords dont match!");
+    login({ variables: formData });
   };
 
-  if (data?.signup.token) {
-    enqueueSnackbar(`SignUp succesfull! Welcome ${data?.signup.username}`, {
-      variant: "success",
-    });
-    window.localStorage.setItem("token", data?.signup.token);
-    return <Redirect to="/" />;
-  }
+  useEffect(() => {
+    if (data?.login.token) {
+      enqueueSnackbar(
+        `Login succesfull! Welcome ${data?.login.user?.username}`,
+        {
+          variant: "success",
+        }
+      );
+      dispatch({
+        type: LOGIN_USER,
+        data: { user: data.login.user, token: data.login.token },
+      });
+      history.push("/");
+    }
+  }, [data, login]);
+
   if (error) {
     enqueueSnackbar(error, { variant: "error" });
   }
 
   return (
     <Card>
+      {loading && <LinearProgress />}
       <form onSubmit={onSubmit}>
         <Grid container direction="column" justify="center" alignItems="center">
-          <Typography variant="h3">Sign Up</Typography>
+          <Typography variant="h3">Login</Typography>
           <TextField
             required
             className={classes.margin}
@@ -77,8 +81,6 @@ export const Login = () => {
             label="Username"
             variant="outlined"
             onChange={handleChange}
-            error={data?.signup.errors?.username ? true : false}
-            helperText={data?.signup.errors?.username}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -95,8 +97,8 @@ export const Login = () => {
             onChange={handleChange}
             type="password"
             variant="outlined"
-            error={data?.signup.errors?.password ? true : false}
-            helperText={data?.signup.errors?.password}
+            error={data?.login.error ? true : false}
+            helperText={data?.login.error}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -106,8 +108,11 @@ export const Login = () => {
             }}
           />
           <Button color="primary" variant="outlined" type="submit">
-            SignUp
+            Login
           </Button>
+          <Link to="/signup">
+            <Typography variant="h6">Signup</Typography>
+          </Link>
         </Grid>
       </form>
     </Card>

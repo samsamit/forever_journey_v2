@@ -18,6 +18,16 @@ type Mutation {
   ): signupPayload! @lambda
 }
 
+type Query {
+  login(username: String!, password: String!): loginPayload! @lambda
+}
+
+type loginPayload {
+  user: User
+  token: String
+  error: String
+}
+
 type signupPayload {
   username: String
   token: String

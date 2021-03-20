@@ -1,5 +1,6 @@
 import { gql } from "@apollo/client"
-
+import jwt from "jsonwebtoken";
+import { UserRole } from "../types/globalTypes";
 
 export const SIGNUP = gql`
 mutation singup(
@@ -23,3 +24,32 @@ mutation singup(
   }
 }
 `;
+
+export const LOGIN = gql`
+  query login($username: String!, $password: String!){
+  login(username: $username, password: $password){
+    user{
+      username
+      email
+      role
+      characters{
+        name
+        race
+        id
+      }
+    }
+    token
+    error
+  }
+}
+`;
+
+
+export const getTokenData = (token: string): {valid: boolean, data?: {username?: string, role?: UserRole}} => {
+  if(token){
+    const decodedToken = jwt.decode(token!, { json: true });
+    const valid = Date.now() < decodedToken?.exp! * 1000;
+    return {valid, data: decodedToken?.data}
+  }
+return {valid: false};
+}

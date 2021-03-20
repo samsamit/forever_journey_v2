@@ -18,6 +18,16 @@ type Mutation {
   ): signupPayload! @lambda
 }
 
+type Query {
+  login(username: String!, password: String!): loginPayload! @lambda
+}
+
+type loginPayload {
+  user: User
+  token: String
+  error: String
+}
+
 type signupPayload {
   username: String
   token: String
@@ -41,8 +51,8 @@ type User @secret(field: "password") {
 }
 
 enum UserRole {
-  USER
-  ADMIN
+  USER = 0,
+  ADMIN = 1
 }
 
 # Dgraph.Authorization {"VerificationKey":"YourSecretKey","Header":"auth","Namespace":"https://localhost:8080/jwt/claims","Algo":"HS256"}

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 async function signupUser({args, graphql}){
-        const foundUser = await graphql(`
+        const {data, errors} = await graphql(`
         mutation (
             $username: String!,
             $email: String!,
@@ -24,15 +24,15 @@ async function signupUser({args, graphql}){
             "email": args.email,
             "password": args.password
         });
-        console.log(foundUser);
-        if(foundUser.data.addUser !== null){
-            var username = foundUser.data.addUser.user[0].username;
-            var token = createToken(username);
-            return {username, token};
+        console.log(data.addUser);
+        console.log(errors);
+        if(data.addUser !== null){
+            var token = createToken(data.addUser.user[0].username, data.addUser.user[0].role);
+            return {username: data.addUser.user[0].username, token};
         }
         var error = new Object();
-        if(foundUser.errors[0]){
-            var msg = foundUser.errors[0].message;
+        if(errors[0]){
+            var msg = errors[0].message;
             if(msg.includes("Password")){
                 console.log("Error password");
                 error.password = "Password too weak!";
@@ -43,13 +43,46 @@ async function signupUser({args, graphql}){
             }
         }
         
-        return {username: null, token: null,
-            errors: {username: error.username, password: error.password}};
+        return {errors: {username: error.username, password: error.password}};
 };
 
-const createToken = (username) => {
+async function loginUser({args, graphql}){
+    const {data, errors} = await graphql(`
+    query Login($username: String!, $password: String!){
+        checkUserPassword(username: $username, password: $password){
+          username
+          role
+          email
+          characters{
+            id
+            name
+            race
+          }
+        }
+      }
+    `, {
+        "username": args.username,
+        "password": args.password
+    });
+
+    console.log(data);
+    console.log(errors);
+    if(errors){
+        return {error: errors[0].message}
+    }
+
+    if(data.checkUserPassword){
+        var token = createToken(data.checkUserPassword.username, data.checkUserPassword.role);
+        return {user: data.checkUserPassword, token}
+    }else{
+        return {error: "Wrong username or password!"}
+    }
+
+}
+
+const createToken = (username, role) => {
     return jwt.sign(
-        {data: {username}}, 
+        {data: {username, role}}, 
         'YourSecretKey', 
         { expiresIn: '1h' }
     );
@@ -57,4 +90,5 @@ const createToken = (username) => {
 
 self.addGraphQLResolvers({
     "Mutation.signup": signupUser,
+    "Query.login": loginUser
 })

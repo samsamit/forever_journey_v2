@@ -31,6 +31,7 @@ export const CreateUserButton = (props: IProps) => {
 
   const onChange = (e: any) => {
     setnewUser({ ...newUser, [e.target.id]: e.target.value });
+    console.log(e.target.id + " " + e.target.value);
   };
 
   const onSubmit = async (e: any) => {
@@ -88,7 +89,9 @@ export const CreateUserButton = (props: IProps) => {
             labelId="role-select-label"
             id="role"
             value={newUser.role}
-            onChange={onChange}
+            onChange={(e) =>
+              setnewUser({ ...newUser, role: e.target.value as UserRole })
+            }
           >
             <MenuItem value={roleKeys[0]}>{roleKeys[0]}</MenuItem>
             <MenuItem value={roleKeys[1]}>{roleKeys[1]}</MenuItem>

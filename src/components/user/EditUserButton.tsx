@@ -39,6 +39,9 @@ export const EditUserButton = (props: IProps) => {
   const onChange = (e: any) => {
     seteditedChar({ ...editedUser, [e.target.id]: e.target.value });
   };
+  const onSelect = (e: any) => {
+    seteditedChar({ ...editedUser, role: e.target.value });
+  };
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
@@ -86,7 +89,7 @@ export const EditUserButton = (props: IProps) => {
             labelId="role-select-label"
             id="role"
             value={editedUser.role}
-            onChange={onChange}
+            onChange={onSelect}
           >
             <MenuItem value={roleKeys[0]}>{roleKeys[0]}</MenuItem>
             <MenuItem value={roleKeys[1]}>{roleKeys[1]}</MenuItem>
