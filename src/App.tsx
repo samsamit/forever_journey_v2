@@ -13,14 +13,16 @@ import { useSnackbar } from "notistack";
 import { RoleRoute } from "./Util/RoleRoute";
 import { UserRole } from "./types/globalTypes";
 import { IRootState } from "./GlobalState/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { LOGOUT_USER } from "./GlobalState/Reducers/UserReducer";
 
 function App() {
   const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
   const user = useSelector((state: IRootState) => state.user);
   if (user.loggedIn) {
     if (!getTokenData(user.token).valid) {
-      window.localStorage.removeItem("token");
+      dispatch({ type: LOGOUT_USER });
       enqueueSnackbar("Auth token is not valid anymore. Please login.", {
         variant: "warning",
       });

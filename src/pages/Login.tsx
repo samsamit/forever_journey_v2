@@ -34,8 +34,8 @@ export const Login = () => {
     LOGIN
   );
   const [formData, setformData] = useState<loginVariables>({
-    password: "",
-    username: "",
+    password: "admin6",
+    username: "admin",
   });
 
   const handleChange = (e: any) => {
@@ -81,6 +81,7 @@ export const Login = () => {
             label="Username"
             variant="outlined"
             onChange={handleChange}
+            value={formData.username}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -95,6 +96,7 @@ export const Login = () => {
             id="password"
             label="Password"
             onChange={handleChange}
+            value={formData.password}
             type="password"
             variant="outlined"
             error={data?.login.error ? true : false}
