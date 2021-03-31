@@ -57,6 +57,11 @@ async function loginUser({args, graphql}){
             id
             name
             race
+            attributes{
+                hp
+                atk
+                mov
+              }
           }
         }
       }

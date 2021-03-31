@@ -10,12 +10,18 @@ import {
 import HumanEditIcon from "mdi-react/HumanEditIcon";
 import { useSnackbar } from "notistack";
 import React, { useState } from "react";
+import { keys } from "ts-transformer-keys";
 import { CHARACTERS_EDIT } from "../../controllers/character/characterController";
 import {
   editCharacterVariables,
   editCharacter_updateCharacter,
 } from "../../types/editCharacter";
-import { CharacterPatch, CharacterRef } from "../../types/globalTypes";
+import {
+  AttributesRef,
+  CharacterPatch,
+  CharacterRef,
+} from "../../types/globalTypes";
+import { ValueChangerButton } from "../util/ValueChangerButton";
 interface IProps {
   character: CharacterRef;
 }
@@ -26,6 +32,11 @@ export const EditCharacterButton = (props: IProps) => {
   const [editedChar, seteditedChar] = useState<CharacterPatch>({
     name: character.name,
     race: character.race,
+    attributes: {
+      atk: character.attributes?.atk,
+      hp: character.attributes?.hp,
+      mov: character.attributes?.mov,
+    },
   });
 
   const [editChar, { loading, error }] = useMutation<
@@ -53,6 +64,13 @@ export const EditCharacterButton = (props: IProps) => {
     setopen(false);
   };
 
+  const handleAttributeChange = (id: string, value: number) => {
+    seteditedChar({ ...editedChar, attributes: { [id]: value } });
+  };
+
+  console.log(editedChar.attributes);
+  const attrKeys = Object.keys(editedChar.attributes!);
+  console.log(attrKeys);
   return (
     <>
       <IconButton size="small" onClick={() => setopen(true)}>
@@ -75,6 +93,15 @@ export const EditCharacterButton = (props: IProps) => {
             value={editedChar.race ? editedChar.race : ""}
             onChange={onChange}
           />
+          {attrKeys.map((key, i) => (
+            <ValueChangerButton
+              key={i}
+              label={key}
+              inputValue={(editedChar.attributes as any)[key]}
+              handleChange={(value) => handleAttributeChange(key, value)}
+            />
+          ))}
+
           <Button variant="outlined" color="primary" onClick={onSubmit}>
             Save
           </Button>

@@ -38,6 +38,13 @@ type Character {
   name: String!
   race: String!
   owner: User! @hasInverse(field: characters)
+  attributes: Attributes
+}
+
+type Attributes {
+  hp: Int
+  atk: Int
+  mov: Int
 }
 type ErrorList {
   password: String
@@ -47,12 +54,18 @@ type User @secret(field: "password") {
   username: String! @id
   email: String!
   characters: [Character] @hasInverse(field: owner)
+  parties: [party] @hasInverse(field: name)
   role: UserRole! @search
 }
 
+type party {
+  name: String! @id
+  characters: [Character]
+}
+
 enum UserRole {
-  USER = 0,
-  ADMIN = 1
+  USER
+  ADMIN
 }
 
 # Dgraph.Authorization {"VerificationKey":"YourSecretKey","Header":"auth","Namespace":"https://localhost:8080/jwt/claims","Algo":"HS256"}

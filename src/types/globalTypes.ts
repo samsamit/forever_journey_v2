@@ -8,6 +8,7 @@
 //==============================================================
 
 export enum CharacterHasFilter {
+  attributes = "attributes",
   name = "name",
   owner = "owner",
   race = "race",
@@ -33,6 +34,12 @@ export interface AddUserInput {
   password: string;
 }
 
+export interface AttributesRef {
+  hp?: number | null;
+  atk?: number | null;
+  mov?: number | null;
+}
+
 export interface CharacterFilter {
   id?: string[] | null;
   has?: (CharacterHasFilter | null)[] | null;
@@ -45,6 +52,7 @@ export interface CharacterPatch {
   name?: string | null;
   race?: string | null;
   owner?: UserRef | null;
+  attributes?: AttributesRef | null;
 }
 
 export interface CharacterRef {
@@ -52,6 +60,7 @@ export interface CharacterRef {
   name?: string | null;
   race?: string | null;
   owner?: UserRef | null;
+  attributes?: AttributesRef | null;
 }
 
 export interface StringHashFilter {

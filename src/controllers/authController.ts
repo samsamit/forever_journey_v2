@@ -36,6 +36,11 @@ export const LOGIN = gql`
         name
         race
         id
+        attributes{
+          hp
+          atk
+          mov
+      }
       }
     }
     token

@@ -3,7 +3,7 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { AddUserInput, UserRole } from "./globalTypes";
+import { AddUserInput } from "./globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: addUser
@@ -12,7 +12,6 @@ import { AddUserInput, UserRole } from "./globalTypes";
 export interface addUser_addUser_user {
   __typename: "User";
   username: string;
-  role: UserRole;
 }
 
 export interface addUser_addUser {

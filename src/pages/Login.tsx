@@ -50,6 +50,7 @@ export const Login = () => {
 
   useEffect(() => {
     if (data?.login.token) {
+      console.log(data.login);
       enqueueSnackbar(
         `Login succesfull! Welcome ${data?.login.user?.username}`,
         {

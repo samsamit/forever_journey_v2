@@ -1,13 +1,40 @@
-import { ITile, MapType, TileStateEnum } from "../../GlobalState/Reducers/MapReducer";
+import { C_mapSize, mapStartAreaHeight } from "../../constants";
+import { MapType, ITile, TileStateEnum, MapStateEnum, IMapState } from "../../GlobalState/Reducers/GameStateReducer";
+import { CharacterRef } from "../../types/globalTypes";
 
-export const testMapData = (): MapType => {
-    const size = 20;
+export const getBaseMap = (): MapType => {
     const initTile: ITile = {
         bgColor: "white",
-        content: "0",
+        content: "",
         state: TileStateEnum.idle
     }
-    return Array(size).fill(Array(size).fill(initTile));
+    let newMap = [];
+    for(let i = 0; i < C_mapSize; i++){
+        let thisArray = [];
+        for(let j = 0; j < C_mapSize; j++){
+            let newTile = JSON.parse(JSON.stringify(initTile));
+            thisArray.push(newTile)
+        }
+        newMap.push(thisArray);
+    }
+    return newMap;
+}
+
+export const getMapByState = (state: MapStateEnum): MapType => {
+    switch(state){
+        case MapStateEnum.SelectStartPosition:
+            const baseMap = getBaseMap();
+           for(let i = 0; i < mapStartAreaHeight; i++){
+                for(let j = 0; j < C_mapSize; j++){
+                    baseMap[(C_mapSize-1) - i][j].bgColor = "gray";
+                    baseMap[(C_mapSize - 1) - i][j].state = TileStateEnum.moveChar;
+                }
+            } 
+            return baseMap;
+
+        default:
+            return getBaseMap();
+    }
 }
 
 const getTileIndex = (tileId: string): {i: number, j: number} => {
@@ -17,15 +44,22 @@ const getTileIndex = (tileId: string): {i: number, j: number} => {
     return {i, j}
 }
 
-export const handleTileClick = (tileId: string, map: MapType): MapType => {
-    const {i, j} = getTileIndex(tileId);
-    let modifyMap = map;
+export interface mapTileClickData{
+    clickId: string;
+    map: IMapState;
+    character?: CharacterRef;
+}
+
+export const handleTileClick = (clickData: mapTileClickData): MapType => {
+    const {map, clickId} = clickData;
+    const {i, j} = getTileIndex(clickId);
+    let modifyMap = [...map.baseMap];
     switch(modifyMap[i][j].state){
         case TileStateEnum.idle:
             modifyMap[i][j].state = TileStateEnum.selected;
             modifyMap[i][j].bgColor = "red";
             modifyMap[i][j].content = "1";
-            modifyMap = handleTileActivation(tileId, modifyMap, 2);
+            modifyMap = handleTileActivation(clickId, modifyMap, 4);
             break;
         
         case TileStateEnum.selected:
@@ -36,6 +70,9 @@ export const handleTileClick = (tileId: string, map: MapType): MapType => {
             }));
             break;
 
+        case TileStateEnum.moveChar:
+            break;
+            
         default:
             break;
     }

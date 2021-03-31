@@ -3,7 +3,7 @@ import { maybeDeepFreeze } from "@apollo/client/utilities";
 import { Grid, makeStyles, Typography } from "@material-ui/core";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CLICK_TILE } from "../../GlobalState/Reducers/MapReducer";
+import { CLICK_TILE } from "../../GlobalState/Reducers/GameStateReducer";
 import { IRootState } from "../../GlobalState/store";
 
 const useStyles = makeStyles({
@@ -38,7 +38,7 @@ interface IProps {}
 export const BaseMap = (props: IProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const map = useSelector((state: IRootState) => state.map);
+  const map = useSelector((state: IRootState) => state.gameState.map);
 
   const tileClicked = (e: any) => {
     dispatch({ type: CLICK_TILE, data: { id: e.target.id } });

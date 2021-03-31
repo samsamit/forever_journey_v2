@@ -1,5 +1,4 @@
 import React from "react";
-import "./App.css";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { NavBar } from "./components/NavBar";
 import { Home } from "./pages/Home";
@@ -15,6 +14,9 @@ import { UserRole } from "./types/globalTypes";
 import { IRootState } from "./GlobalState/store";
 import { useDispatch, useSelector } from "react-redux";
 import { LOGOUT_USER } from "./GlobalState/Reducers/UserReducer";
+import Grid from "@material-ui/core/Grid";
+import { BaseMap } from "./components/Map/BaseMap";
+import { AdventurePage } from "./pages/AdventurePage";
 
 function App() {
   const { enqueueSnackbar } = useSnackbar();
@@ -30,30 +32,39 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <NavBar />
-      <header className="App-header">
+    <Grid
+      style={{ height: "100%" }}
+      container
+      direction="column"
+      justify="flex-start"
+      alignItems="stretch"
+    >
+      <Grid item xs={"auto"}>
+        <NavBar />
+      </Grid>
+      <Grid item xs={true}>
         {user.loggedIn ? (
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route exact path="/character" component={CharacterPage} />
             <RoleRoute
               path="/admin"
               userRole={user.userInfo?.role}
               Component={AdminPage}
               targetRole={[UserRole.ADMIN]}
             />
+            <Route exact path="/adventure" component={AdventurePage} />
             <Route path="*" component={NoMatch} />
           </Switch>
         ) : (
           <Switch>
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/login" component={Login} />
+
             <Route path="*" component={NoMatch} />
           </Switch>
         )}
-      </header>
-    </div>
+      </Grid>
+    </Grid>
   );
 }
 

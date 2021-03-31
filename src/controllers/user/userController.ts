@@ -10,6 +10,11 @@ query getAllUsers{
       id
       race
       name
+      attributes{
+          hp
+          atk
+          mov
+        }
     }
   }
 }
@@ -22,7 +27,6 @@ mutation addUser(
  addUser(input: [$user]){
   user{
     username
-    role
   }
 } 
 }
@@ -33,12 +37,6 @@ mutation updateUser($patch: UpdateUserInput!){
  updateUser(input: $patch){
   user{
     username
-    role
-    email
-    characters{
-      name
-      race
-    }
   }
 } 
 }
@@ -51,12 +49,6 @@ mutation deleteUser($username: String!){
 }){
   user{
     username
-    role
-    email
-    characters{
-      name
-      race
-    }
   }
 } 
 }

@@ -3,7 +3,7 @@ import thunk from "redux-thunk";
 import localForage from 'localforage';
 import {persistReducer} from "redux-persist";
 import UserReducer from "./Reducers/UserReducer";
-import MapReducer from "./Reducers/MapReducer";
+import GameStateReducer from "./Reducers/GameStateReducer";
 
 const w: any = window as any;
 const devtools: any = w.devToolsExtension
@@ -29,7 +29,7 @@ export interface ReducerInput{
 
 const reducers = combineReducers({
     user: UserReducer,
-    map: MapReducer
+    gameState: GameStateReducer
   });
   export type IRootState = ReturnType<typeof reducers>;
   const persisted = persistReducer(persistConfig, reducers);

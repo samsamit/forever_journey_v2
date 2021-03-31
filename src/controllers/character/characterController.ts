@@ -7,6 +7,11 @@ export const CHARACTERS_GET_ALL = gql`
         id
         name
         race
+        attributes{
+          hp
+          atk
+          mov
+        }
       }
     }
   }
@@ -19,14 +24,23 @@ mutation addCharacter($name: String!, $race: String!, $owner: UserRef!){
         name: $name
         race: $race
         owner: $owner
+        attributes: {
+          hp: 10
+          atk: 1
+          mov: 1
+        }
       },
     ]){
       character{
-        id
         name
         race
         owner{
           username
+        }
+        attributes{
+          hp
+          atk
+          mov
         }
       }
     }
@@ -49,7 +63,6 @@ mutation editCharacter($patch: UpdateCharacterInput!){
     updateCharacter(input:$patch){
       character{
         name
-        race
       }
     }
   }

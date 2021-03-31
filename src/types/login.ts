@@ -9,11 +9,19 @@ import { UserRole } from "./globalTypes";
 // GraphQL query operation: login
 // ====================================================
 
+export interface login_login_user_characters_attributes {
+  __typename: "Attributes";
+  hp: number | null;
+  atk: number | null;
+  mov: number | null;
+}
+
 export interface login_login_user_characters {
   __typename: "Character";
   name: string;
   race: string;
   id: string;
+  attributes: login_login_user_characters_attributes | null;
 }
 
 export interface login_login_user {

@@ -12,7 +12,6 @@ import { UpdateCharacterInput } from "./globalTypes";
 export interface editCharacter_updateCharacter_character {
   __typename: "Character";
   name: string;
-  race: string;
 }
 
 export interface editCharacter_updateCharacter {

@@ -14,12 +14,19 @@ export interface addCharacter_addCharacter_character_owner {
   username: string;
 }
 
+export interface addCharacter_addCharacter_character_attributes {
+  __typename: "Attributes";
+  hp: number | null;
+  atk: number | null;
+  mov: number | null;
+}
+
 export interface addCharacter_addCharacter_character {
   __typename: "Character";
-  id: string;
   name: string;
   race: string;
   owner: addCharacter_addCharacter_character_owner;
+  attributes: addCharacter_addCharacter_character_attributes | null;
 }
 
 export interface addCharacter_addCharacter {

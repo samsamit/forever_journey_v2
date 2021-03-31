@@ -3,4 +3,11 @@ type Character {
   name: String!
   race: String!
   owner: User! @hasInverse(field: characters)
+  attributes: Attributes
+}
+
+type Attributes {
+  hp: Int
+  atk: Int
+  mov: Int
 }

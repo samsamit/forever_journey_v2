@@ -1,3 +1,5 @@
+import classes from "*.module.css";
+import { makeStyles } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import Grid from "@material-ui/core/Grid";
 import React from "react";
@@ -5,9 +7,14 @@ import { useSelector } from "react-redux";
 import { CharacterCard } from "../components/character/CharacterCard";
 import { UserCard } from "../components/user/UserCard";
 import { IRootState } from "../GlobalState/store";
-
+const useStyles = makeStyles({
+  root: {
+    height: "100%",
+  },
+});
 interface IProps {}
 export const Home = (props: IProps) => {
+  const classes = useStyles();
   const user = useSelector((state: IRootState) => state.user);
 
   const characters = () => {
@@ -20,11 +27,17 @@ export const Home = (props: IProps) => {
     return <>{cards}</>;
   };
   return (
-    <Grid container>
-      <Grid item sm={10}>
+    <Grid
+      className={classes.root}
+      container
+      direction="row"
+      justify="space-around"
+      alignItems="stretch"
+    >
+      <Grid item xs={10}>
         {characters()}
       </Grid>
-      <Grid item sm="auto">
+      <Grid item xs={2}>
         <UserCard user={user} />
       </Grid>
     </Grid>

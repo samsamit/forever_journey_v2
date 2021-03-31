@@ -6,8 +6,7 @@ import { IUserState } from "../../GlobalState/Reducers/UserReducer";
 const useStyle = makeStyles({
   root: {
     margin: 20,
-    width: "100%",
-    height: "100%",
+    height: 200,
   },
 });
 interface IProps {

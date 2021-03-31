@@ -32,8 +32,8 @@ export const NavBar = (props: IProps) => {
             alignItems="center"
           >
             <Link to="/">Home</Link>
-            <Link to="/character">Character</Link>
             <Link to="/admin">admin</Link>
+            <Link to="/adventure">Adventure</Link>
             <Button onClick={logoutEvent}>Logout</Button>
           </Grid>
         </Toolbar>
