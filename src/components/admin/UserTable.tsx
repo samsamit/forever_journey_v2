@@ -125,9 +125,7 @@ const Row = (props: IRowProps) => {
     </React.Fragment>
   );
 };
-
 interface IProps {}
-
 export const UserTable = (props: IProps) => {
   const classes = useStyles();
   const { data, loading, error } = useQuery<getAllUsers>(GET_ALL_USER, {

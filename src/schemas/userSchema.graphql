@@ -2,16 +2,9 @@ type User @secret(field: "password") {
   username: String! @id
   email: String!
   characters: [Character] @hasInverse(field: owner)
-  parties: [party] @hasInverse(field: owner)
+  parties: [String]!
   role: UserRole! @search
 }
-
-type party {
-  name: String! @id
-  owner: String!
-  characters: [Character]
-}
-
 enum UserRole {
   USER
   ADMIN

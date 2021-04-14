@@ -38,7 +38,6 @@ export const CreateCharacterButton = (props: IProps) => {
       enqueueSnackbar("Character created succesfully!", { variant: "success" });
     setnewChar({ ...newChar, name: "", race: "" });
   };
-
   if (error) console.log(error);
 
   return (

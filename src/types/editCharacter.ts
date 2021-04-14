@@ -9,9 +9,19 @@ import { UpdateCharacterInput } from "./globalTypes";
 // GraphQL mutation operation: editCharacter
 // ====================================================
 
+export interface editCharacter_updateCharacter_character_attributes {
+  __typename: "Attributes";
+  hp: number | null;
+  atk: number | null;
+  mov: number | null;
+}
+
 export interface editCharacter_updateCharacter_character {
   __typename: "Character";
   name: string;
+  race: string;
+  party: string | null;
+  attributes: editCharacter_updateCharacter_character_attributes | null;
 }
 
 export interface editCharacter_updateCharacter {

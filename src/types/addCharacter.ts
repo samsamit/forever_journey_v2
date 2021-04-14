@@ -25,6 +25,7 @@ export interface addCharacter_addCharacter_character {
   __typename: "Character";
   name: string;
   race: string;
+  party: string | null;
   owner: addCharacter_addCharacter_character_owner;
   attributes: addCharacter_addCharacter_character_attributes | null;
 }

@@ -1,19 +1,17 @@
-import { useMutation } from "@apollo/client";
-import { Card, makeStyles } from "@material-ui/core";
+import { Card, Grid, makeStyles } from "@material-ui/core";
 import React from "react";
-import { CHARACTERS_DELETE } from "../../controllers/character/characterController";
-import {
-  deleteCharacter,
-  deleteCharacterVariables,
-} from "../../types/deleteCharacter";
 import { CharacterRef } from "../../types/globalTypes";
+import { PartySelect } from "./PartySelect";
+import { RemovePartyButton } from "./RemovePartyButton";
 
 const useStyles = makeStyles({
   root: {
-    margin: 20,
+    boxSizing: "border-box",
+    padding: 20,
     width: "100%",
     height: 80,
     display: "inline-block",
+    backgroundColor: "#3da813",
   },
 });
 interface IProps {
@@ -26,7 +24,16 @@ export const CharacterCard = (props: IProps) => {
   if (character)
     return (
       <Card className={classes.root}>
-        {character.name + " - " + character.race}
+        <Grid container>
+          <Grid item>{character.name + " - " + character.race}</Grid>
+          <Grid item>
+            {character.party ? (
+              <RemovePartyButton characterId={character.id!} />
+            ) : (
+              <PartySelect character={character} />
+            )}
+          </Grid>
+        </Grid>
       </Card>
     );
   else {

@@ -44,13 +44,12 @@ export const Login = () => {
 
   const onSubmit = (e: any) => {
     e.preventDefault();
-    console.log(formData);
     login({ variables: formData });
   };
 
   useEffect(() => {
     if (data?.login.token) {
-      console.log(data.login);
+      console.log(data.login.user);
       enqueueSnackbar(
         `Login succesfull! Welcome ${data?.login.user?.username}`,
         {

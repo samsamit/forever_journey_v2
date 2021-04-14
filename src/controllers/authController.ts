@@ -32,10 +32,12 @@ export const LOGIN = gql`
       username
       email
       role
+      parties
       characters{
         name
         race
         id
+        party
         attributes{
           hp
           atk

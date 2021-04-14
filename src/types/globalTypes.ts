@@ -11,12 +11,14 @@ export enum CharacterHasFilter {
   attributes = "attributes",
   name = "name",
   owner = "owner",
+  party = "party",
   race = "race",
 }
 
 export enum UserHasFilter {
   characters = "characters",
   email = "email",
+  parties = "parties",
   role = "role",
   username = "username",
 }
@@ -30,6 +32,7 @@ export interface AddUserInput {
   username: string;
   email: string;
   characters?: (CharacterRef | null)[] | null;
+  parties: (string | null)[];
   role: UserRole;
   password: string;
 }
@@ -53,6 +56,7 @@ export interface CharacterPatch {
   race?: string | null;
   owner?: UserRef | null;
   attributes?: AttributesRef | null;
+  party?: string | null;
 }
 
 export interface CharacterRef {
@@ -61,6 +65,7 @@ export interface CharacterRef {
   race?: string | null;
   owner?: UserRef | null;
   attributes?: AttributesRef | null;
+  party?: string | null;
 }
 
 export interface StringHashFilter {
@@ -92,6 +97,7 @@ export interface UserFilter {
 export interface UserPatch {
   email?: string | null;
   characters?: (CharacterRef | null)[] | null;
+  parties?: (string | null)[] | null;
   role?: UserRole | null;
   password?: string | null;
 }
@@ -100,6 +106,7 @@ export interface UserRef {
   username?: string | null;
   email?: string | null;
   characters?: (CharacterRef | null)[] | null;
+  parties?: (string | null)[] | null;
   role?: UserRole | null;
   password?: string | null;
 }

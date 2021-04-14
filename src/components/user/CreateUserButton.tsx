@@ -21,6 +21,7 @@ export const CreateUserButton = (props: IProps) => {
     username: "",
     email: "",
     password: "",
+    parties: [],
     role: UserRole.USER,
   });
   const [open, setopen] = useState(false);
@@ -31,12 +32,10 @@ export const CreateUserButton = (props: IProps) => {
 
   const onChange = (e: any) => {
     setnewUser({ ...newUser, [e.target.id]: e.target.value });
-    console.log(e.target.id + " " + e.target.value);
   };
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    console.log(newUser);
     await addUser({ variables: { user: newUser } });
     if (error) enqueueSnackbar(error, { variant: "error" });
     else

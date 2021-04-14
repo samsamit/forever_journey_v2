@@ -4,6 +4,7 @@ type Character {
   race: String!
   owner: User! @hasInverse(field: characters)
   attributes: Attributes
+  party: String
 }
 
 type Attributes {

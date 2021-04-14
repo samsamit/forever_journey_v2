@@ -7,10 +7,12 @@ $props = @{
     ContentType = 'application/json'
     Body = $body
 }
-Remove-Item -path $schemas\schema.graphql
-Write-Output "Removed old schema..."
-get-content $schemas\*.graphql | set-content $schemas\schema.graphql
-Write-Output "Created new schema..."
+Remove-Item -path $schemas\schema.graphql;
+Start-Sleep -Seconds 0.5
+Write-Output "Removed old schema...";
+get-content $schemas\*.graphql | set-content $schemas\schema.graphql;
+Start-Sleep -Seconds 0.5
+Write-Output "Created new schema...";
 
 $resp = Invoke-WebRequest @props
 if($resp.StatusCode){

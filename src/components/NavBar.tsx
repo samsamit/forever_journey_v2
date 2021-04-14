@@ -1,11 +1,8 @@
-import { useQuery } from "@apollo/client";
 import { Button } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
-import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Toolbar from "@material-ui/core/Toolbar";
 import { useSnackbar } from "notistack";
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { LOGOUT_USER } from "../GlobalState/Reducers/UserReducer";

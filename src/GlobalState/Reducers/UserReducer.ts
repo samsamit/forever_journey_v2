@@ -15,6 +15,7 @@ const initialState: IUserState = {
 
 export const LOGIN_USER = "LOGIN_USER";
 export const LOGOUT_USER = "LOGOUT_USER";
+export const UPDATE_CHARACTER = "UPDATE_CHARACTER";
 
 export default (state: IUserState = initialState,  action: ReducerInput): IUserState => {
     switch (action.type) {
@@ -28,7 +29,12 @@ export default (state: IUserState = initialState,  action: ReducerInput): IUserS
     
     case LOGOUT_USER:
         return initialState
-
+    
+    case UPDATE_CHARACTER:
+        return {
+            ...state,
+            
+        }
     default:
         return state
     }

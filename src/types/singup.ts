@@ -14,7 +14,7 @@ export interface singup_signup_errors {
 }
 
 export interface singup_signup {
-  __typename: "signupPayload";
+  __typename: "SignupPayload";
   username: string | null;
   token: string | null;
   errors: singup_signup_errors | null;

@@ -21,6 +21,7 @@ export interface login_login_user_characters {
   name: string;
   race: string;
   id: string;
+  party: string | null;
   attributes: login_login_user_characters_attributes | null;
 }
 
@@ -29,11 +30,12 @@ export interface login_login_user {
   username: string;
   email: string;
   role: UserRole;
+  parties: (string | null)[];
   characters: (login_login_user_characters | null)[] | null;
 }
 
 export interface login_login {
-  __typename: "loginPayload";
+  __typename: "LoginPayload";
   user: login_login_user | null;
   token: string | null;
   error: string | null;

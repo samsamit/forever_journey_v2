@@ -10,18 +10,14 @@ import {
 import HumanEditIcon from "mdi-react/HumanEditIcon";
 import { useSnackbar } from "notistack";
 import React, { useState } from "react";
-import { keys } from "ts-transformer-keys";
 import { CHARACTERS_EDIT } from "../../controllers/character/characterController";
 import {
   editCharacterVariables,
   editCharacter_updateCharacter,
 } from "../../types/editCharacter";
-import {
-  AttributesRef,
-  CharacterPatch,
-  CharacterRef,
-} from "../../types/globalTypes";
+import { CharacterPatch, CharacterRef } from "../../types/globalTypes";
 import { ValueChangerButton } from "../util/ValueChangerButton";
+import { PartySelect } from "./PartySelect";
 interface IProps {
   character: CharacterRef;
 }
@@ -65,12 +61,19 @@ export const EditCharacterButton = (props: IProps) => {
   };
 
   const handleAttributeChange = (id: string, value: number) => {
-    seteditedChar({ ...editedChar, attributes: { [id]: value } });
+    seteditedChar({
+      ...editedChar,
+      attributes: { ...editedChar.attributes, [id]: value },
+    });
   };
-
-  console.log(editedChar.attributes);
-  const attrKeys = Object.keys(editedChar.attributes!);
-  console.log(attrKeys);
+  const attrChangers = Object.keys(editedChar.attributes!).map((key, i) => (
+    <ValueChangerButton
+      key={i}
+      label={key}
+      inputValue={(editedChar.attributes as any)[key]}
+      handleChange={(value) => handleAttributeChange(key, value)}
+    />
+  ));
   return (
     <>
       <IconButton size="small" onClick={() => setopen(true)}>
@@ -93,15 +96,8 @@ export const EditCharacterButton = (props: IProps) => {
             value={editedChar.race ? editedChar.race : ""}
             onChange={onChange}
           />
-          {attrKeys.map((key, i) => (
-            <ValueChangerButton
-              key={i}
-              label={key}
-              inputValue={(editedChar.attributes as any)[key]}
-              handleChange={(value) => handleAttributeChange(key, value)}
-            />
-          ))}
-
+          {attrChangers}
+          <PartySelect character={character} />
           <Button variant="outlined" color="primary" onClick={onSubmit}>
             Save
           </Button>

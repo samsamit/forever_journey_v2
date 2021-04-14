@@ -13,6 +13,7 @@ async function signupUser({args, graphql}){
                 password: $password
                 role: USER
                 characters: []
+                parties: []
             }]){
                 user{
                     username
@@ -24,7 +25,7 @@ async function signupUser({args, graphql}){
             "email": args.email,
             "password": args.password
         });
-        console.log(data.addUser);
+        console.log(data);
         console.log(errors);
         if(data.addUser !== null){
             var token = createToken(data.addUser.user[0].username, data.addUser.user[0].role);
@@ -53,10 +54,12 @@ async function loginUser({args, graphql}){
           username
           role
           email
+          parties
           characters{
             id
             name
             race
+            party
             attributes{
                 hp
                 atk
@@ -69,7 +72,6 @@ async function loginUser({args, graphql}){
         "username": args.username,
         "password": args.password
     });
-
     console.log(data);
     console.log(errors);
     if(errors){

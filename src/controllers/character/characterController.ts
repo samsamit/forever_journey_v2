@@ -1,22 +1,5 @@
 import { gql } from "@apollo/client";
 
-export const CHARACTERS_GET_ALL = gql`
-  query GetAllCharacters($user: String!) {
-    getUser(username: $user) {
-      characters {
-        id
-        name
-        race
-        attributes{
-          hp
-          atk
-          mov
-        }
-      }
-    }
-  }
-`;
-
 export const CHARACTERS_ADD = gql`
 mutation addCharacter($name: String!, $race: String!, $owner: UserRef!){
     addCharacter(input: [
@@ -32,16 +15,15 @@ mutation addCharacter($name: String!, $race: String!, $owner: UserRef!){
       },
     ]){
       character{
-        name
-        race
-        owner{
-          username
-        }
-        attributes{
-          hp
-          atk
-          mov
-        }
+        id
+      name
+      race
+      attributes{
+        hp
+        atk
+        mov
+      }
+      party
       }
     }
   }
@@ -62,7 +44,15 @@ export const CHARACTERS_EDIT = gql`
 mutation editCharacter($patch: UpdateCharacterInput!){
     updateCharacter(input:$patch){
       character{
-        name
+        id
+      name
+      race
+      attributes{
+        hp
+        atk
+        mov
+      }
+      party
       }
     }
   }
