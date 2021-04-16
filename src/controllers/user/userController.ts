@@ -37,25 +37,25 @@ mutation addUser(
 export const UPDATE_USER = gql`
 mutation updateUser($patch: UpdateUserInput!){
   updateUser(input: $patch){
-    user{
-      username
+    user {
       email
-      characters{
-        id
-        name
-        race
-        attributes{
-          hp
-          atk
-          mov
-        }
-        party
-      }
       parties
       role
+      username
+      characters {
+        attributes {
+          atk
+          hp
+          mov
+        }
+        id
+        name
+        party
+        race
+      }
     }
   }
-} 
+}
 `;
 
 export const DELETE_USER = gql`

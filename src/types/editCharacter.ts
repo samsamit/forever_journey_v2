@@ -18,10 +18,11 @@ export interface editCharacter_updateCharacter_character_attributes {
 
 export interface editCharacter_updateCharacter_character {
   __typename: "Character";
+  id: string;
   name: string;
   race: string;
-  party: string | null;
   attributes: editCharacter_updateCharacter_character_attributes | null;
+  party: string | null;
 }
 
 export interface editCharacter_updateCharacter {

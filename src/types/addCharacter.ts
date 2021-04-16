@@ -9,11 +9,6 @@ import { UserRef } from "./globalTypes";
 // GraphQL mutation operation: addCharacter
 // ====================================================
 
-export interface addCharacter_addCharacter_character_owner {
-  __typename: "User";
-  username: string;
-}
-
 export interface addCharacter_addCharacter_character_attributes {
   __typename: "Attributes";
   hp: number | null;
@@ -23,11 +18,11 @@ export interface addCharacter_addCharacter_character_attributes {
 
 export interface addCharacter_addCharacter_character {
   __typename: "Character";
+  id: string;
   name: string;
   race: string;
-  party: string | null;
-  owner: addCharacter_addCharacter_character_owner;
   attributes: addCharacter_addCharacter_character_attributes | null;
+  party: string | null;
 }
 
 export interface addCharacter_addCharacter {

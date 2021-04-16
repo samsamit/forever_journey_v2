@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { IRootState } from "../../GlobalState/store";
 import { AddPartyButton } from "../user/AddPartyButton";
 import { CharacterCard } from "./CharacterCard";
+import { DeletePartyButton } from "./DeletePartyButton";
 const useStyle = makeStyles({
   partyCard: {
     margin: 20,
@@ -15,12 +16,18 @@ export const CharacterList = (props: IProps) => {
   const classes = useStyle();
   const user = useSelector((state: IRootState) => state.user.userInfo!);
   const { parties, characters } = user;
+  if (!parties || !characters) return <p>Loading...</p>;
   return (
     <>
       <AddPartyButton User={user} />
       {parties?.map((party, i) => (
         <Card key={i} className={classes.partyCard}>
-          <CardHeader title={party} />
+          <CardHeader
+            title={party}
+            action={
+              <DeletePartyButton username={user.username!} partyName={party!} />
+            }
+          />
           {characters?.map((char, j) => {
             if (char?.party === party)
               return <CharacterCard key={j} character={char} />;

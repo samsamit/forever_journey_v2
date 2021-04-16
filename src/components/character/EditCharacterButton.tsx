@@ -6,11 +6,18 @@ import {
   LinearProgress,
   TextField,
   Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
 } from "@material-ui/core";
 import HumanEditIcon from "mdi-react/HumanEditIcon";
 import { useSnackbar } from "notistack";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { CHARACTERS_EDIT } from "../../controllers/character/characterController";
+import { UPDATE_CHARACTER } from "../../GlobalState/Reducers/UserReducer";
+import { IRootState } from "../../GlobalState/store";
 import {
   editCharacterVariables,
   editCharacter_updateCharacter,
@@ -23,8 +30,12 @@ interface IProps {
 }
 export const EditCharacterButton = (props: IProps) => {
   const { character } = props;
+  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const [open, setopen] = useState(false);
+  const parties = useSelector(
+    (state: IRootState) => state.user.userInfo?.parties
+  );
   const [editedChar, seteditedChar] = useState<CharacterPatch>({
     name: character.name,
     race: character.race,
@@ -33,14 +44,16 @@ export const EditCharacterButton = (props: IProps) => {
       hp: character.attributes?.hp,
       mov: character.attributes?.mov,
     },
+    party: character.party,
   });
 
-  const [editChar, { loading, error }] = useMutation<
+  const [editChar, { loading, error, data }] = useMutation<
     editCharacter_updateCharacter,
     editCharacterVariables
   >(CHARACTERS_EDIT);
 
   const onChange = (e: any) => {
+    console.log(e.target.id);
     seteditedChar({ ...editedChar, [e.target.id]: e.target.value });
   };
 
@@ -66,6 +79,13 @@ export const EditCharacterButton = (props: IProps) => {
       attributes: { ...editedChar.attributes, [id]: value },
     });
   };
+
+  const handlePartyChange = (e: any) => {
+    seteditedChar({
+      ...editedChar,
+      party: e.target.value,
+    });
+  };
   const attrChangers = Object.keys(editedChar.attributes!).map((key, i) => (
     <ValueChangerButton
       key={i}
@@ -74,6 +94,11 @@ export const EditCharacterButton = (props: IProps) => {
       handleChange={(value) => handleAttributeChange(key, value)}
     />
   ));
+
+  if (data) {
+    dispatch({ type: UPDATE_CHARACTER, data: data.character });
+  }
+
   return (
     <>
       <IconButton size="small" onClick={() => setopen(true)}>
@@ -97,7 +122,26 @@ export const EditCharacterButton = (props: IProps) => {
             onChange={onChange}
           />
           {attrChangers}
-          <PartySelect character={character} />
+          <FormControl>
+            <InputLabel id="label">Party</InputLabel>
+            <Select
+              variant="outlined"
+              labelId="label"
+              value={editedChar.party ? editedChar.party : ""}
+              onChange={handlePartyChange}
+            >
+              <MenuItem value={""}>No party</MenuItem>
+              {parties &&
+                parties.map(
+                  (party, i) =>
+                    party && (
+                      <MenuItem key={i} value={party!}>
+                        {party}
+                      </MenuItem>
+                    )
+                )}
+            </Select>
+          </FormControl>
           <Button variant="outlined" color="primary" onClick={onSubmit}>
             Save
           </Button>

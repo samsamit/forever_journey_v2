@@ -1,5 +1,7 @@
 import { Card, Grid, makeStyles } from "@material-ui/core";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { UPDATE_CHARACTER } from "../../GlobalState/Reducers/UserReducer";
 import { CharacterRef } from "../../types/globalTypes";
 import { PartySelect } from "./PartySelect";
 import { RemovePartyButton } from "./RemovePartyButton";
@@ -19,8 +21,14 @@ interface IProps {
 }
 
 export const CharacterCard = (props: IProps) => {
+  const dispatch = useDispatch();
   const classes = useStyles();
   const { character } = props;
+
+  const charUpdate = (char: CharacterRef) => {
+    console.table(char);
+  };
+
   if (character)
     return (
       <Card className={classes.root}>

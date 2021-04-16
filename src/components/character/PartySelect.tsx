@@ -1,9 +1,10 @@
 import { useMutation } from "@apollo/client";
 import { FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
 import { useSnackbar } from "notistack";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { CHARACTERS_EDIT } from "../../controllers/character/characterController";
+import { UPDATE_CHARACTER } from "../../GlobalState/Reducers/UserReducer";
 import { IRootState } from "../../GlobalState/store";
 import {
   editCharacter,
@@ -16,20 +17,21 @@ interface IProps {
 export const PartySelect = (props: IProps) => {
   const { character } = props;
   const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
   const [party, setparty] = useState<string>(
     character.party ? character.party : ""
   );
   const parties = useSelector(
     (state: IRootState) => state.user.userInfo?.parties
   );
-  const [changeParty, { loading, error, data }] = useMutation<
+  const [changeParty, { error, data }] = useMutation<
     editCharacter,
     editCharacterVariables
   >(CHARACTERS_EDIT);
 
-  const handleChange = (e: any) => {
+  const handleChange = async (e: any) => {
     setparty(e.target.value);
-    changeParty({
+    await changeParty({
       variables: {
         patch: {
           filter: { id: [character.id!] },
@@ -37,13 +39,22 @@ export const PartySelect = (props: IProps) => {
         },
       },
     });
+    console.log("changeParty");
   };
 
-  if (data) {
-    console.log(data);
-  }
+  useEffect(() => {
+    if (data && data.updateCharacter?.character) {
+      console.log(data);
+      dispatch({
+        type: UPDATE_CHARACTER,
+        data: data.updateCharacter?.character[0],
+      });
+    }
+  }, [data]);
 
-  if (error) enqueueSnackbar(error, { variant: "error" });
+  if (error) {
+    enqueueSnackbar(error, { variant: "error" });
+  }
 
   return (
     <FormControl>

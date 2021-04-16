@@ -19,17 +19,19 @@ export interface getAllUsers_queryUser_characters_attributes {
 export interface getAllUsers_queryUser_characters {
   __typename: "Character";
   id: string;
-  race: string;
   name: string;
+  race: string;
   attributes: getAllUsers_queryUser_characters_attributes | null;
+  party: string | null;
 }
 
 export interface getAllUsers_queryUser {
   __typename: "User";
   username: string;
-  role: UserRole;
   email: string;
   characters: (getAllUsers_queryUser_characters | null)[] | null;
+  parties: (string | null)[];
+  role: UserRole;
 }
 
 export interface getAllUsers {
