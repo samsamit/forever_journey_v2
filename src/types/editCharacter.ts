@@ -23,6 +23,7 @@ export interface editCharacter_updateCharacter_character {
   race: string;
   attributes: editCharacter_updateCharacter_character_attributes | null;
   party: string | null;
+  avatarPath: string | null;
 }
 
 export interface editCharacter_updateCharacter {

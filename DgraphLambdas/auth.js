@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-
 async function signupUser({args, graphql}){
         const {data, errors} = await graphql(`
         mutation (
@@ -48,24 +47,26 @@ async function signupUser({args, graphql}){
 };
 
 async function loginUser({args, graphql}){
+    console.log("Started logging in");
     const {data, errors} = await graphql(`
     query Login($username: String!, $password: String!){
         checkUserPassword(username: $username, password: $password){
-          username
-          role
-          email
-          parties
-          characters{
-            id
-            name
-            race
-            party
-            attributes{
+            username
+            email
+            role
+            parties
+            characters{
+                name
+                race
+                id
+                party
+                attributes{
                 hp
                 atk
                 mov
-              }
-          }
+                }
+                avatarPath
+            }
         }
       }
     `, {

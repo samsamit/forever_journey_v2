@@ -135,7 +135,7 @@ export const UserTable = (props: IProps) => {
   return (
     <div>
       {error && <p>Error getting users</p>}
-      {loading && <p>loading</p>}
+      {loading && <p>loading...</p>}
       <TableContainer component={Paper}>
         <Table>
           <TableHead>

@@ -23,6 +23,7 @@ export interface addCharacter_addCharacter_character {
   race: string;
   attributes: addCharacter_addCharacter_character_attributes | null;
   party: string | null;
+  avatarPath: string | null;
 }
 
 export interface addCharacter_addCharacter {
@@ -38,4 +39,5 @@ export interface addCharacterVariables {
   name: string;
   race: string;
   owner: UserRef;
+  avatarPath: string;
 }

@@ -3,22 +3,27 @@ import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import IconButton from "@material-ui/core/IconButton";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CHARACTERS_ADD } from "../../controllers/character/characterController";
 import { addCharacter, addCharacterVariables } from "../../types/addCharacter";
 import PlusCircleIcon from "mdi-react/PlusCircleIcon";
 import { useSnackbar } from "notistack";
 import TextField from "@material-ui/core/TextField";
+import { UPDATE_CHARACTER } from "../../GlobalState/Reducers/UserReducer";
+import { useDispatch } from "react-redux";
 
 interface IProps {
   user: string;
 }
 export const CreateCharacterButton = (props: IProps) => {
+  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const [newChar, setnewChar] = useState<addCharacterVariables>({
     name: "",
     owner: { username: props.user },
     race: "",
+    avatarPath:
+      "/TestAvatars/con" + (Math.floor(Math.random() * 42) + 1) + ".png",
   });
   const [open, setopen] = useState(false);
   const [addChar, { data, loading, error }] = useMutation<
@@ -32,6 +37,7 @@ export const CreateCharacterButton = (props: IProps) => {
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
+    console.log(newChar);
     await addChar({ variables: newChar });
     if (error) enqueueSnackbar(error, { variant: "error" });
     else
@@ -39,6 +45,12 @@ export const CreateCharacterButton = (props: IProps) => {
     setnewChar({ ...newChar, name: "", race: "" });
   };
   if (error) console.log(error);
+
+  useEffect(() => {
+    if (data) {
+      dispatch({ type: UPDATE_CHARACTER, data: data.addCharacter?.character });
+    }
+  }, [data]);
 
   return (
     <>

@@ -34,26 +34,27 @@ mutation addUser(
 }
 `;
 
+
 export const UPDATE_USER = gql`
 mutation updateUser($patch: UpdateUserInput!){
   updateUser(input: $patch){
-    user {
-      email
-      parties
-      role
-      username
-      characters {
-        attributes {
-          atk
-          hp
-          mov
-        }
-        id
-        name
-        party
-        race
+    user{
+    username
+    email
+    characters{
+      id
+      name
+      race
+      attributes{
+        hp
+        atk
+        mov
       }
+      party
     }
+    parties
+    role
+  }
   }
 }
 `;

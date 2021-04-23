@@ -11,27 +11,27 @@ import { UpdateUserInput, UserRole } from "./globalTypes";
 
 export interface updateUser_updateUser_user_characters_attributes {
   __typename: "Attributes";
-  atk: number | null;
   hp: number | null;
+  atk: number | null;
   mov: number | null;
 }
 
 export interface updateUser_updateUser_user_characters {
   __typename: "Character";
-  attributes: updateUser_updateUser_user_characters_attributes | null;
   id: string;
   name: string;
-  party: string | null;
   race: string;
+  attributes: updateUser_updateUser_user_characters_attributes | null;
+  party: string | null;
 }
 
 export interface updateUser_updateUser_user {
   __typename: "User";
+  username: string;
   email: string;
+  characters: (updateUser_updateUser_user_characters | null)[] | null;
   parties: (string | null)[];
   role: UserRole;
-  username: string;
-  characters: (updateUser_updateUser_user_characters | null)[] | null;
 }
 
 export interface updateUser_updateUser {

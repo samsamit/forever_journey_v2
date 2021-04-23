@@ -9,6 +9,7 @@
 
 export enum CharacterHasFilter {
   attributes = "attributes",
+  avatarPath = "avatarPath",
   name = "name",
   owner = "owner",
   party = "party",
@@ -57,6 +58,7 @@ export interface CharacterPatch {
   owner?: UserRef | null;
   attributes?: AttributesRef | null;
   party?: string | null;
+  avatarPath?: string | null;
 }
 
 export interface CharacterRef {
@@ -66,6 +68,7 @@ export interface CharacterRef {
   owner?: UserRef | null;
   attributes?: AttributesRef | null;
   party?: string | null;
+  avatarPath?: string | null;
 }
 
 export interface StringHashFilter {

@@ -29,6 +29,7 @@ type Character {
   owner: User! @hasInverse(field: characters)
   attributes: Attributes
   party: String
+  avatarPath: String
 }
 
 type Attributes {

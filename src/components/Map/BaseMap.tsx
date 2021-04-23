@@ -1,15 +1,12 @@
-import classes from "*.module.css";
-import { maybeDeepFreeze } from "@apollo/client/utilities";
-import { Grid, makeStyles, Typography } from "@material-ui/core";
-import React from "react";
+import { Avatar, makeStyles } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { CLICK_TILE } from "../../GlobalState/Reducers/GameStateReducer";
 import { IRootState } from "../../GlobalState/store";
 
 const useStyles = makeStyles({
   container: {
-    width: "80vw",
-    height: "80vh",
+    minWidth: "10vw",
+    width: "100%",
     backgroundColor: "white",
     display: "flex",
     flexDirection: "column",
@@ -41,7 +38,7 @@ export const BaseMap = (props: IProps) => {
   const map = useSelector((state: IRootState) => state.gameState.map);
 
   const tileClicked = (e: any) => {
-    dispatch({ type: CLICK_TILE, data: { id: e.target.id } });
+    dispatch({ type: CLICK_TILE, data: e.target.id });
   };
 
   const mapTiles = map.baseMap.map((row, i) => (
@@ -52,9 +49,19 @@ export const BaseMap = (props: IProps) => {
           className={classes.tile}
           onClick={tileClicked}
           id={`${i},${j}`}
-          style={{ backgroundColor: `${tile.bgColor}` }}
+          style={{
+            backgroundColor: `${tile.bgColor}`,
+          }}
         >
-          {tile.content}
+          {tile?.character?.avatarPath ? (
+            <Avatar
+              alt="Remy Sharp"
+              src={tile.character.avatarPath}
+              style={{ pointerEvents: "none" }}
+            />
+          ) : (
+            tile.content
+          )}
         </div>
       ))}
     </div>

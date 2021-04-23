@@ -42,7 +42,8 @@ export const LOGIN = gql`
           hp
           atk
           mov
-      }
+        }
+        avatarPath
       }
     }
     token

@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import HumanEditIcon from "mdi-react/HumanEditIcon";
 import { useSnackbar } from "notistack";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CHARACTERS_EDIT } from "../../controllers/character/characterController";
 import { UPDATE_CHARACTER } from "../../GlobalState/Reducers/UserReducer";
@@ -95,9 +95,11 @@ export const EditCharacterButton = (props: IProps) => {
     />
   ));
 
-  if (data) {
-    dispatch({ type: UPDATE_CHARACTER, data: data.character });
-  }
+  useEffect(() => {
+    if (data) {
+      dispatch({ type: UPDATE_CHARACTER, data: data.character });
+    }
+  }, [data]);
 
   return (
     <>

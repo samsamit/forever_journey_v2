@@ -23,6 +23,7 @@ export interface login_login_user_characters {
   id: string;
   party: string | null;
   attributes: login_login_user_characters_attributes | null;
+  avatarPath: string | null;
 }
 
 export interface login_login_user {

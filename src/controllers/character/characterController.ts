@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const CHARACTERS_ADD = gql`
-mutation addCharacter($name: String!, $race: String!, $owner: UserRef!){
+mutation addCharacter($name: String!, $race: String!, $owner: UserRef!, $avatarPath: String!){
     addCharacter(input: [
       {
         name: $name
@@ -12,6 +12,7 @@ mutation addCharacter($name: String!, $race: String!, $owner: UserRef!){
           atk: 1
           mov: 1
         }
+        avatarPath: $avatarPath
       },
     ]){
       character{
@@ -24,6 +25,7 @@ mutation addCharacter($name: String!, $race: String!, $owner: UserRef!){
         mov
       }
       party
+      avatarPath
       }
     }
   }
@@ -53,6 +55,7 @@ mutation editCharacter($patch: UpdateCharacterInput!){
         mov
       }
       party
+      avatarPath
       }
     }
   }

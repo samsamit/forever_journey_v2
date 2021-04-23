@@ -1,6 +1,7 @@
 import { C_mapSize, mapStartAreaHeight } from "../../constants";
-import { MapType, ITile, TileStateEnum, MapStateEnum, IMapState } from "../../GlobalState/Reducers/GameStateReducer";
+import { CharacterMatchState } from "../../GlobalState/Reducers/GameStateReducer";
 import { CharacterRef } from "../../types/globalTypes";
+import { IMapState, ITile, MapStateEnum, MapType, TileStateEnum } from "./MapTypes";
 
 export const getBaseMap = (): MapType => {
     const initTile: ITile = {
@@ -45,39 +46,30 @@ const getTileIndex = (tileId: string): {i: number, j: number} => {
 }
 
 export interface mapTileClickData{
-    clickId: string;
-    map: IMapState;
-    character?: CharacterRef;
+    activeCharacter?: CharacterMatchState | undefined;
+    position: string;
+    curMap: IMapState;
 }
 
-export const handleTileClick = (clickData: mapTileClickData): MapType => {
-    const {map, clickId} = clickData;
-    const {i, j} = getTileIndex(clickId);
-    let modifyMap = [...map.baseMap];
-    switch(modifyMap[i][j].state){
-        case TileStateEnum.idle:
-            modifyMap[i][j].state = TileStateEnum.selected;
-            modifyMap[i][j].bgColor = "red";
-            modifyMap[i][j].content = "1";
-            modifyMap = handleTileActivation(clickId, modifyMap, 4);
-            break;
-        
-        case TileStateEnum.selected:
-            modifyMap.forEach(row => row.forEach(tile => {
-                tile.content = "0";
-                tile.bgColor = "white";
-                tile.state = TileStateEnum.idle;
-            }));
+export const handleTileClick = ({position, activeCharacter, curMap:{baseMap, mapState}}: mapTileClickData): mapTileClickData => {
+    const {i, j} = getTileIndex(position);
+    const modifiedMap = baseMap;
+    const modifiedCharacter = activeCharacter;
+    const tileData = baseMap[i][j];
+    switch(mapState){
+        case MapStateEnum.SelectStartPosition:
+            if(tileData.state != TileStateEnum.moveChar) break;
+            const newtile = tileData;
+            newtile.character = activeCharacter?.character;
+            modifiedMap[i][j] = newtile;
             break;
 
-        case TileStateEnum.moveChar:
-            break;
-            
         default:
             break;
     }
-    return modifyMap;
+    return {curMap: {baseMap: modifiedMap, mapState}, activeCharacter: modifiedCharacter, position};
 }
+
 
 const handleTileActivation = (tileId: string, map: MapType, range: number): MapType => {
     const mapToModify = map;

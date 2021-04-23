@@ -8,6 +8,7 @@ import {
   ApolloClient,
   InMemoryCache,
   createHttpLink,
+  DefaultOptions,
 } from "@apollo/client";
 import { BrowserRouter as Router } from "react-router-dom";
 import { setContext } from "@apollo/client/link/context";
@@ -33,9 +34,21 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+const defaultOptions: DefaultOptions = {
+  watchQuery: {
+    fetchPolicy: "network-only",
+    errorPolicy: "ignore",
+  },
+  query: {
+    fetchPolicy: "no-cache",
+    errorPolicy: "all",
+  },
+};
+
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
+  defaultOptions: defaultOptions,
 });
 
 let persistor = persistStore(store);
