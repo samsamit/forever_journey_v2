@@ -17,6 +17,8 @@ export const LOGIN_USER = "LOGIN_USER";
 export const LOGOUT_USER = "LOGOUT_USER";
 export const UPDATE_CHARACTER = "UPDATE_CHARACTER";
 export const UPDATE_PARTIES = "UPDATE_USER";
+export const ADD_PARTY = "ADD_PARTY";
+export const DELETE_PARTY = "DELETE_PARTY";
 
 export default (state: IUserState = initialState,  action: ReducerInput): IUserState => {
     switch (action.type) {
@@ -44,14 +46,14 @@ export default (state: IUserState = initialState,  action: ReducerInput): IUserS
             },
         }
 
-        case UPDATE_PARTIES:
-            return{
-                ...state,
-                userInfo: {
-                    ...state.userInfo,
-                    parties: action.data 
-                }
+    case UPDATE_PARTIES:
+        return{
+            ...state,
+            userInfo: {
+                ...state.userInfo,
+                parties: action.data 
             }
+        }
 
     default:
         return state

@@ -8,7 +8,7 @@ import {
   Typography,
   Card,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AccountCircleIcon from "mdi-react/AccountCircleIcon";
 import AtIcon from "mdi-react/AtIcon";
 import LockIcon from "mdi-react/LockIcon";
@@ -18,7 +18,7 @@ import { SIGNUP } from "../controllers/authController";
 import { singup, singupVariables } from "../types/singup";
 import { useSnackbar } from "notistack";
 import { Redirect } from "react-router";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 const useStyles = makeStyles({
   margin: {
     margin: "20px",
@@ -28,6 +28,7 @@ const useStyles = makeStyles({
 export const Signup = () => {
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
+  let history = useHistory();
   const [signUp, { loading, error, data }] = useMutation<
     singup,
     singupVariables
@@ -55,13 +56,16 @@ export const Signup = () => {
     else setconfpasswordError("Passwords dont match!");
   };
 
-  if (data?.signup.token) {
-    enqueueSnackbar(`SignUp succesfull! Welcome ${data?.signup.username}`, {
-      variant: "success",
-    });
-    window.localStorage.setItem("token", data?.signup.token);
-    return <Redirect to="/" />;
-  }
+  useEffect(() => {
+    if (data?.signup.token) {
+      enqueueSnackbar(`SignUp succesfull! Welcome ${data?.signup.username}`, {
+        variant: "success",
+      });
+      window.localStorage.setItem("token", data?.signup.token);
+      history.push("/");
+    }
+  }, [data]);
+
   if (error) {
     enqueueSnackbar(error, { variant: "error" });
   }

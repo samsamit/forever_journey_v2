@@ -9,13 +9,12 @@ import {
 } from "@material-ui/core";
 import PencilIcon from "mdi-react/PencilIcon";
 import { useSnackbar } from "notistack";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { UPDATE_USER } from "../../controllers/user/userController";
-import { UserRef, UserRole } from "../../types/globalTypes";
-import {
-  updateUser_updateUser,
-  updateUserVariables,
-} from "../../types/updateUser";
+import { UPDATE_PARTIES } from "../../GlobalState/Reducers/UserReducer";
+import { UserRef } from "../../types/globalTypes";
+import { updateUserVariables, updateUser } from "../../types/updateUser";
 
 interface IProps {
   User: UserRef;
@@ -24,10 +23,11 @@ interface IProps {
 export const AddPartyButton = (props: IProps) => {
   const { enqueueSnackbar } = useSnackbar();
   const [open, setopen] = useState(false);
+  const dispatch = useDispatch();
   const [partyName, setpartyName] = useState("");
 
   const [editUser, { loading, error, data }] = useMutation<
-    updateUser_updateUser,
+    updateUser,
     updateUserVariables
   >(UPDATE_USER);
 
@@ -50,11 +50,17 @@ export const AddPartyButton = (props: IProps) => {
     if (error) enqueueSnackbar(error, { variant: "error" });
   };
 
-  if (data && open) {
-    console.log(data);
-    enqueueSnackbar("User saved succesfully!", { variant: "success" });
-    setopen(false);
-  }
+  useEffect(() => {
+    if (data && data.updateUser?.user && open) {
+      console.log(data);
+      dispatch({
+        type: UPDATE_PARTIES,
+        data: data.updateUser.user[0]?.parties,
+      });
+      enqueueSnackbar("PArty added succesfully!", { variant: "success" });
+      setopen(false);
+    }
+  }, [data]);
 
   return (
     <>
