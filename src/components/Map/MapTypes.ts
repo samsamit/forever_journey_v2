@@ -7,6 +7,12 @@ export interface ITile{
     bgColor: string;
     state: TileStateEnum;
 }
+
+export interface mapPosition{
+    x: number,
+    y: number,
+}
+
 export enum TileStateEnum{
     idle,
     selected,
@@ -23,4 +29,5 @@ export interface IMapState {
 export enum MapStateEnum{
     none,
     SelectStartPosition,
+    ReadyToStartBattle
 }

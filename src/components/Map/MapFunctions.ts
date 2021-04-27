@@ -1,7 +1,8 @@
 import { C_mapSize, mapStartAreaHeight } from "../../constants";
-import { CharacterMatchState } from "../../GlobalState/Reducers/GameStateReducer";
+import { CharacterMatchState, IGameState } from "../../GlobalState/Reducers/GameStateReducer";
 import { CharacterRef } from "../../types/globalTypes";
 import { IMapState, ITile, MapStateEnum, MapType, TileStateEnum } from "./MapTypes";
+import isEqual from "lodash/isEqual";
 
 export const getBaseMap = (): MapType => {
     const initTile: ITile = {
@@ -45,29 +46,59 @@ const getTileIndex = (tileId: string): {i: number, j: number} => {
     return {i, j}
 }
 
-export interface mapTileClickData{
-    activeCharacter?: CharacterMatchState | undefined;
-    position: string;
-    curMap: IMapState;
-}
-
-export const handleTileClick = ({position, activeCharacter, curMap:{baseMap, mapState}}: mapTileClickData): mapTileClickData => {
+export const handleTileClick = (GameState: IGameState, position: string): IGameState => {
+    const {activeCharacter, playerParty, map:{baseMap, mapState}} = GameState;
     const {i, j} = getTileIndex(position);
-    const modifiedMap = baseMap;
-    const modifiedCharacter = activeCharacter;
+    let modifiedmapState = mapState;
+    let modifiedMap = baseMap;
+    let modifiedParty = playerParty;
+    let modifiedCharacter = activeCharacter;
     const tileData = baseMap[i][j];
     switch(mapState){
-        case MapStateEnum.SelectStartPosition:
-            if(tileData.state != TileStateEnum.moveChar) break;
+        case MapStateEnum.ReadyToStartBattle:
+        case MapStateEnum.SelectStartPosition: 
+            if(tileData.state != TileStateEnum.moveChar || !activeCharacter) break;
             const newtile = tileData;
-            newtile.character = activeCharacter?.character;
+            //Delete same character from old tile
+            if(activeCharacter.position && !isEqual(activeCharacter.position, {x:i, y:j})){
+                const {x, y} = activeCharacter.position;
+                modifiedMap[x][y].character = undefined;
+            }
+           
+            //Handle char deletion
+            modifiedParty = modifiedParty.map(char => {
+                if(newtile.character?.name === char.character.name){
+                char.position = undefined;
+                }
+                if(char.character.name === activeCharacter.character.name
+                    && tileData.character?.name !== activeCharacter.character.name){
+                char.position = {x:i, y:j};
+                }
+                return char;
+            });
+
+            // Remove or add character
+            if(tileData.character?.name === activeCharacter.character.name){
+                newtile.character = undefined;
+            }else{
+                newtile.character = activeCharacter.character;
+            }
             modifiedMap[i][j] = newtile;
+            isAllPlaced(modifiedParty) ? modifiedmapState = MapStateEnum.ReadyToStartBattle : modifiedmapState = MapStateEnum.SelectStartPosition;
             break;
 
         default:
             break;
     }
-    return {curMap: {baseMap: modifiedMap, mapState}, activeCharacter: modifiedCharacter, position};
+    return {...GameState, activeCharacter: modifiedCharacter, playerParty, map: {baseMap: modifiedMap, mapState: modifiedmapState}};
+}
+
+const isAllPlaced = (party: Array<CharacterMatchState>): boolean => {
+    let plcasedCouner = 0;
+    party.forEach(char => {
+        if(char.position) plcasedCouner++;
+    })
+    return plcasedCouner === party.length;
 }
 
 

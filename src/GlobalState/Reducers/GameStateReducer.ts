@@ -1,12 +1,11 @@
-import { getBaseMap, getMapByState, handleTileClick, mapTileClickData } from "../../components/Map/MapFunctions";
-import { IMapState, MapStateEnum } from "../../components/Map/MapTypes";
+import { getBaseMap, getMapByState, handleTileClick } from "../../components/Map/MapFunctions";
+import { IMapState, MapStateEnum, mapPosition } from "../../components/Map/MapTypes";
 import { CharacterRef } from "../../types/globalTypes"
-import { mapPosition } from "../../types/mapTypes"
 import { ReducerInput } from "../store"
-import isEqual from "lodash/isEqual";
+
 export interface CharacterMatchState{
     character: CharacterRef,
-    position: mapPosition,
+    position?: mapPosition,
 }
 
 export interface IGameState {
@@ -36,8 +35,7 @@ export default (state: IGameState = initialState,  action: ReducerInput): IGameS
         case START_BATTLE:
             let newPartyData: Array<CharacterMatchState> = [];
             action.data.forEach((obj: CharacterRef) => {
-                newPartyData.push({character: obj, position: {x: null, y: null}});
-                console.log(obj);
+                newPartyData.push({character: obj});
             })
             
             return {
@@ -60,21 +58,8 @@ export default (state: IGameState = initialState,  action: ReducerInput): IGameS
             }
 
     case CLICK_TILE:
-        const clickData: mapTileClickData = {
-            curMap: state.map,
-            position: action.data,
-            activeCharacter: state.activeCharacter
-        }
-        const {curMap, activeCharacter: newActiveCharacter} = handleTileClick(clickData);
-        let newParty = state.playerParty;
-        if(!isEqual(state.activeCharacter, newActiveCharacter)){
-            newParty = newParty.map(char => char.character.name === newActiveCharacter?.character.name ? newActiveCharacter! : char!);
-        }
-        return {
-            ...state,
-            playerParty: newParty,
-            map: curMap
-        }
+        return handleTileClick(state, action.data);
+
     default:
         return state
     }

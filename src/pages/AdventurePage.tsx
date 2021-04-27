@@ -7,6 +7,7 @@ import { CharacterBattleCard } from "../components/battle/CharacterBattleCard";
 import { StartBattle } from "../components/battle/StartBattle";
 import { CharacterCard } from "../components/character/CharacterCard";
 import { BaseMap } from "../components/Map/BaseMap";
+import { MapStateButton } from "../components/Map/MapStateButton";
 import { INIT_BATTLE } from "../GlobalState/Reducers/GameStateReducer";
 import { IRootState } from "../GlobalState/store";
 interface IProps {}
@@ -50,6 +51,9 @@ export const AdventurePage = (props: IProps) => {
               )
           )}
         </Grid>
+      </Grid>
+      <Grid item>
+        <MapStateButton />
       </Grid>
       <Grid item>
         <Button onClick={() => dispatch({ type: INIT_BATTLE })}>
