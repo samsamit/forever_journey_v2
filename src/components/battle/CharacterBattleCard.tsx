@@ -24,21 +24,21 @@ export const CharacterBattleCard = (props: IProps) => {
   const { characterData } = props;
   const dispatch = useDispatch();
   const classes = useStyles();
-  const activeCharacter = useSelector(
-    (state: IRootState) => state.gameState.activeCharacter
-  );
+  const gameState = useSelector((state: IRootState) => state.gameState);
   const charActive =
-    characterData.character.name === activeCharacter?.character.name;
+    characterData.character.name === gameState.activeCharacter?.character.name;
   const clickCard = () => {
     if (!charActive) {
       dispatch({ type: ACTIVATE_CHARACTER, data: characterData });
     }
   };
+
+  const getBgColor = () => {
+    if (charActive) return "green";
+    if (!charActive) return "white";
+  };
   return (
-    <Card
-      onClick={clickCard}
-      style={{ backgroundColor: `${charActive ? "green" : "white"}` }}
-    >
+    <Card onClick={clickCard} style={{ backgroundColor: getBgColor() }}>
       <Grid
         container
         direction="row"

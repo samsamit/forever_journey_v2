@@ -54,6 +54,7 @@ async function loginUser({args, graphql}){
             username
             email
             role
+            parties
             characters{
                 name
                 race

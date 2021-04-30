@@ -4,7 +4,6 @@ export interface ITile{
     content: string;
     character?: CharacterRef;
     avatar?: string;
-    bgColor: string;
     state: TileStateEnum;
 }
 
@@ -29,5 +28,7 @@ export interface IMapState {
 export enum MapStateEnum{
     none,
     SelectStartPosition,
-    ReadyToStartBattle
+    ReadyToStartBattle,
+    TurnAction,
+    TurnEnd
 }

@@ -2,6 +2,7 @@ import { Avatar, makeStyles } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { CLICK_TILE } from "../../GlobalState/Reducers/GameStateReducer";
 import { IRootState } from "../../GlobalState/store";
+import { getTileColor } from "./MapFunctions";
 
 const useStyles = makeStyles({
   container: {
@@ -50,12 +51,11 @@ export const BaseMap = (props: IProps) => {
           onClick={tileClicked}
           id={`${i},${j}`}
           style={{
-            backgroundColor: `${tile.bgColor}`,
+            backgroundColor: `${getTileColor(tile.state)}`,
           }}
         >
           {tile?.character?.avatarPath ? (
             <Avatar
-              alt="Remy Sharp"
               src={tile.character.avatarPath}
               style={{ pointerEvents: "none" }}
             />

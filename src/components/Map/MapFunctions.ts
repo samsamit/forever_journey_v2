@@ -6,7 +6,6 @@ import isEqual from "lodash/isEqual";
 
 export const getBaseMap = (): MapType => {
     const initTile: ITile = {
-        bgColor: "white",
         content: "",
         state: TileStateEnum.idle
     }
@@ -22,21 +21,26 @@ export const getBaseMap = (): MapType => {
     return newMap;
 }
 
-export const getMapByState = (state: MapStateEnum): MapType => {
+export const getMapByState = (state: MapStateEnum, curMap: MapType): MapType => {
+    let newMap = [...curMap];
     switch(state){
         case MapStateEnum.SelectStartPosition:
-            const baseMap = getBaseMap();
            for(let i = 0; i < mapStartAreaHeight; i++){
                 for(let j = 0; j < C_mapSize; j++){
-                    baseMap[(C_mapSize-1) - i][j].bgColor = "gray";
-                    baseMap[(C_mapSize - 1) - i][j].state = TileStateEnum.moveChar;
+                    newMap[(C_mapSize - 1) - i][j].state = TileStateEnum.moveChar;
                 }
             } 
-            return baseMap;
+            break;
 
         default:
-            return getBaseMap();
+            newMap = newMap.map(row => row.map(tile => {
+                let newTile = tile;
+                newTile.state = TileStateEnum.idle;
+                return newTile;
+            }));
+            break;
     }
+    return newMap;
 }
 
 const getTileIndex = (tileId: string): {i: number, j: number} => {
@@ -50,8 +54,8 @@ export const handleTileClick = (GameState: IGameState, position: string): IGameS
     const {activeCharacter, playerParty, map:{baseMap, mapState}} = GameState;
     const {i, j} = getTileIndex(position);
     let modifiedmapState = mapState;
-    let modifiedMap = baseMap;
-    let modifiedParty = playerParty;
+    let modifiedMap = [...baseMap];
+    let modifiedParty = [...playerParty];
     let modifiedCharacter = activeCharacter;
     const tileData = baseMap[i][j];
     switch(mapState){
@@ -115,11 +119,32 @@ const handleTileActivation = (tileId: string, map: MapType, range: number): MapT
                 //if the cordinates sum is larger that range then skip them
                 if(Math.abs(x) + Math.abs(y) <= range){
                     mapToModify[(x+i)][(y+j)].state = TileStateEnum.active;
-                    mapToModify[(x+i)][(y+j)].bgColor = "green";
                     mapToModify[(x+i)][(y+j)].content = "2";
                 }
             }
         }
     }
     return mapToModify;
+}
+
+export const getTileColor = (state: TileStateEnum): string => {
+    switch(state){
+        case TileStateEnum.moveChar:
+            return "#51f582";
+        case TileStateEnum.idle:
+            return "white";
+        default:
+            return "white";
+    }
+}
+
+export const calculatePartyInit = (curParty: Array<CharacterMatchState>): Array<CharacterMatchState> => {
+    //Calculates initiative for party characters
+    let newParty = [...curParty];
+    newParty = newParty.map((charData, i) => {
+        let newCahrData = charData;
+        newCahrData.initiative = i;
+        return newCahrData;
+    })
+    return newParty;
 }

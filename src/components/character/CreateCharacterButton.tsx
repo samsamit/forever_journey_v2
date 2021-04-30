@@ -22,8 +22,7 @@ export const CreateCharacterButton = (props: IProps) => {
     name: "",
     owner: { username: props.user },
     race: "",
-    avatarPath:
-      "/TestAvatars/con" + (Math.floor(Math.random() * 42) + 1) + ".png",
+    avatarPath: "",
   });
   const [open, setopen] = useState(false);
   const [addChar, { data, loading, error }] = useMutation<
@@ -37,8 +36,16 @@ export const CreateCharacterButton = (props: IProps) => {
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    console.log(newChar);
-    await addChar({ variables: newChar });
+    console.log({
+      ...newChar,
+      avatarPath: `/TestAvatars/con${Math.floor(Math.random() * 42) + 1}.png`,
+    });
+    await addChar({
+      variables: {
+        ...newChar,
+        avatarPath: `/TestAvatars/con${Math.floor(Math.random() * 42) + 1}.png`,
+      },
+    });
     if (error) enqueueSnackbar(error, { variant: "error" });
     else
       enqueueSnackbar("Character created succesfully!", { variant: "success" });

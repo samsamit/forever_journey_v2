@@ -5,9 +5,9 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CharacterBattleCard } from "../components/battle/CharacterBattleCard";
 import { StartBattle } from "../components/battle/StartBattle";
-import { CharacterCard } from "../components/character/CharacterCard";
 import { BaseMap } from "../components/Map/BaseMap";
-import { MapStateButton } from "../components/Map/MapStateButton";
+import { BattleButtons } from "../components/Map/BattleButtons";
+import { MapStateEnum } from "../components/Map/MapTypes";
 import { INIT_BATTLE } from "../GlobalState/Reducers/GameStateReducer";
 import { IRootState } from "../GlobalState/store";
 interface IProps {}
@@ -28,14 +28,15 @@ export const AdventurePage = (props: IProps) => {
     <Grid
       container
       direction="column"
-      justify="space-around"
+      justify="space-evenly"
       alignItems="center"
       className={classes.root}
     >
-      <Grid item className={classes.mapRoot}>
+      <Grid item>{MapStateEnum[gameState.map.mapState]}</Grid>
+      <Grid item style={{ width: "90vw" }} className={classes.mapRoot}>
         <BaseMap />
       </Grid>
-      <Grid item>
+      <Grid item style={{ width: "90vw" }}>
         <Grid
           container
           direction="row"
@@ -52,10 +53,10 @@ export const AdventurePage = (props: IProps) => {
           )}
         </Grid>
       </Grid>
-      <Grid item>
-        <MapStateButton />
+      <Grid item style={{ width: "90vw" }}>
+        <BattleButtons />
       </Grid>
-      <Grid item>
+      <Grid item style={{ width: "90vw" }}>
         <Button onClick={() => dispatch({ type: INIT_BATTLE })}>
           Reset battle
         </Button>

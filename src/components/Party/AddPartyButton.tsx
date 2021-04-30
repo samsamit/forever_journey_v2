@@ -18,6 +18,7 @@ import { updateUserVariables, updateUser } from "../../types/updateUser";
 
 interface IProps {
   User: UserRef;
+  variant: "small" | "big";
 }
 
 export const AddPartyButton = (props: IProps) => {
@@ -64,9 +65,13 @@ export const AddPartyButton = (props: IProps) => {
 
   return (
     <>
-      <IconButton size="small" onClick={() => setopen(true)}>
-        <PencilIcon />
-      </IconButton>
+      {props.variant === "small" ? (
+        <IconButton size="small" onClick={() => setopen(true)}>
+          <PencilIcon />
+        </IconButton>
+      ) : (
+        <Button endIcon={<PencilIcon />}> Create party: </Button>
+      )}
       <Dialog onClose={() => setopen(false)} open={open}>
         <DialogTitle>New party:</DialogTitle>
         <form style={{ margin: 20 }}>

@@ -1,10 +1,16 @@
-import { Card, CardHeader, makeStyles } from "@material-ui/core";
+import {
+  Card,
+  CardHeader,
+  Grid,
+  makeStyles,
+  Typography,
+} from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../GlobalState/store";
-import { AddPartyButton } from "../user/AddPartyButton";
+import { AddPartyButton } from "../Party/AddPartyButton";
+import { DeletePartyButton } from "../Party/DeletePartyButton";
 import { CharacterCard } from "./CharacterCard";
-import { DeletePartyButton } from "./DeletePartyButton";
 const useStyle = makeStyles({
   partyCard: {
     margin: 20,
@@ -19,7 +25,10 @@ export const CharacterList = (props: IProps) => {
   if (!parties || !characters) return <p>Loading...</p>;
   return (
     <>
-      <AddPartyButton User={user} />
+      <Card className={classes.partyCard}>
+        <AddPartyButton User={user} variant="big" />
+      </Card>
+
       {parties?.map((party, i) => (
         <Card key={i} className={classes.partyCard}>
           <CardHeader

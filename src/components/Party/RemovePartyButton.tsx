@@ -10,7 +10,6 @@ import { IconButton, Tooltip } from "@material-ui/core";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { UPDATE_CHARACTER } from "../../GlobalState/Reducers/UserReducer";
-import { CharacterRef } from "../../types/globalTypes";
 interface IProps {
   characterId: string;
 }

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { START_BATTLE } from "../../GlobalState/Reducers/GameStateReducer";
 import { IRootState } from "../../GlobalState/store";
 import { CharacterRef } from "../../types/globalTypes";
-import { PartyCard } from "../character/PartyCard";
+import { PartyCard } from "../Party/PartyCard";
 interface IProps {}
 export const StartBattle = (props: IProps) => {
   const dispatch = useDispatch();

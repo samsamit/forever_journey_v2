@@ -1,7 +1,4 @@
 import { Card, CardHeader } from "@material-ui/core";
-import React from "react";
-import { useSelector } from "react-redux";
-import { IRootState } from "../../GlobalState/store";
 import { CharacterRef } from "../../types/globalTypes";
 interface IProps {
   partyName: string;

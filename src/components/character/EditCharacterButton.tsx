@@ -24,7 +24,6 @@ import {
 } from "../../types/editCharacter";
 import { CharacterPatch, CharacterRef } from "../../types/globalTypes";
 import { ValueChangerButton } from "../util/ValueChangerButton";
-import { PartySelect } from "./PartySelect";
 interface IProps {
   character: CharacterRef;
 }
