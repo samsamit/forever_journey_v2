@@ -71,7 +71,7 @@ export default (state: IGameState = initialState,  action: ReducerInput): IGameS
     case ACTIVATE_CHARACTER:
             return {
                 ...state,
-                activeCharacter: action.data
+                activeCharacter: state.activeCharacter?.character.name === action.data.character?.name ? undefined : action.data
             }
 
     case CLICK_TILE:

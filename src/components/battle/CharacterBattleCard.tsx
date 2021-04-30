@@ -11,7 +11,11 @@ import {
 } from "../../GlobalState/Reducers/GameStateReducer";
 import { IRootState } from "../../GlobalState/store";
 import { CharacterRef } from "../../types/globalTypes";
+import { AttributeSheet } from "../character/AttributeSheet";
 const useStyles = makeStyles({
+  root: {
+    width: "100%",
+  },
   avatar: {
     width: "100px",
     height: "100px",
@@ -19,26 +23,40 @@ const useStyles = makeStyles({
 });
 interface IProps {
   characterData: CharacterMatchState;
+  variant?: "compact" | "full";
 }
-export const CharacterBattleCard = (props: IProps) => {
-  const { characterData } = props;
+export const CharacterBattleCard = ({
+  characterData,
+  variant = "compact",
+}: IProps) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const gameState = useSelector((state: IRootState) => state.gameState);
   const charActive =
     characterData.character.name === gameState.activeCharacter?.character.name;
   const clickCard = () => {
-    if (!charActive) {
-      dispatch({ type: ACTIVATE_CHARACTER, data: characterData });
-    }
+    dispatch({ type: ACTIVATE_CHARACTER, data: characterData });
   };
 
   const getBgColor = () => {
     if (charActive) return "green";
     if (!charActive) return "white";
   };
+
+  const selectedStyle = (color: string | undefined) => {
+    return !color || color === "white"
+      ? { border: "0px" }
+      : {
+          border: "2px solid",
+          borderColor: color,
+        };
+  };
   return (
-    <Card onClick={clickCard} style={{ backgroundColor: getBgColor() }}>
+    <Card
+      className={classes.root}
+      onClick={clickCard}
+      style={selectedStyle(getBgColor())}
+    >
       <Grid
         container
         direction="row"
@@ -46,8 +64,16 @@ export const CharacterBattleCard = (props: IProps) => {
         alignItems="stretch"
       >
         <Grid item>
-          <CardHeader title={characterData.character.name} />
+          <CardHeader
+            title={characterData.character.name}
+            subheader={characterData.character.race}
+          />
         </Grid>
+        {variant === "full" && (
+          <Grid item xs={5}>
+            <AttributeSheet attributes={characterData.character.attributes!} />
+          </Grid>
+        )}
         <Grid item>
           <CardMedia
             className={classes.avatar}

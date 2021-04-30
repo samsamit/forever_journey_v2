@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SET_MAP_STATE } from "../../GlobalState/Reducers/GameStateReducer";
 import { IRootState, ReducerInput } from "../../GlobalState/store";
-import { MapStateEnum } from "./MapTypes";
+import { MapStateEnum } from "../Map/MapTypes";
 import fill from "lodash/fill";
 interface BattleButtonsOptions {
   buttonText: string;
