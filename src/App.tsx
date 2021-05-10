@@ -33,14 +33,14 @@ function App() {
     <Grid
       style={{ height: "100%" }}
       container
-      direction="column"
-      justify="flex-start"
-      alignItems="stretch"
+      direction="row"
+      justify="center"
+      alignItems="flex-start"
     >
-      <Grid item xs={"auto"}>
+      <Grid item xs={12}>
         <NavBar />
       </Grid>
-      <Grid item xs={true}>
+      <Grid item xs={12}>
         {user.loggedIn ? (
           <Switch>
             <Route exact path="/" component={Home} />

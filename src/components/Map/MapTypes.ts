@@ -1,16 +1,6 @@
+import { ActionStateEnum, CharacterMatchState } from "../../GlobalState/Reducers/GameStateReducer";
 import { CharacterRef } from "../../types/globalTypes";
 
-export interface ITile{
-    content: string;
-    character?: CharacterRef;
-    avatar?: string;
-    state: TileStateEnum;
-}
-
-export interface mapPosition{
-    x: number,
-    y: number,
-}
 
 export enum TileStateEnum{
     idle,
@@ -19,6 +9,20 @@ export enum TileStateEnum{
     moveChar,
     hasChar
 }
+export interface ITile{
+    characterData?: CharacterMatchState;
+    allyAffectors: Array<string>;
+    enemyAffectors: Array<string>;
+    availableToPlayer: Array<string>;
+    state: TileStateEnum;
+    bgColor?: string;
+}
+export interface mapPosition{
+    x: number,
+    y: number,
+}
+
+
 export type MapType = Array<Array<ITile>>;
 export interface IMapState {
     baseMap: MapType;
@@ -31,4 +35,9 @@ export enum MapStateEnum{
     ReadyToStartBattle,
     TurnAction,
     TurnEnd
+}
+
+export interface IActionPlan{
+    targetPosition?: mapPosition,
+    targetAction: ActionStateEnum,
 }

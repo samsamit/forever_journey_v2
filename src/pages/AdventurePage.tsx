@@ -7,7 +7,10 @@ import { StartBattle } from "../components/battle/StartBattle";
 import { BaseMap } from "../components/Map/BaseMap";
 import { BattleButtons } from "../components/battle/BattleButtons";
 import { MapStateEnum } from "../components/Map/MapTypes";
-import { INIT_BATTLE } from "../GlobalState/Reducers/GameStateReducer";
+import {
+  INIT_BATTLE,
+  SET_MAP_STATE,
+} from "../GlobalState/Reducers/GameStateReducer";
 import { IRootState } from "../GlobalState/store";
 import { CharacterContainer } from "../components/battle/CharacterContainer";
 interface IProps {}
@@ -43,9 +46,22 @@ export const AdventurePage = (props: IProps) => {
         <BattleButtons />
       </Grid>
       <Grid item style={{ width: "90vw" }}>
-        <Button onClick={() => dispatch({ type: INIT_BATTLE })}>
-          Reset battle
-        </Button>
+        <Grid container>
+          <Grid>
+            <Button onClick={() => dispatch({ type: INIT_BATTLE })}>
+              Reset battle
+            </Button>
+          </Grid>
+          <Grid>
+            <Button
+              onClick={() =>
+                dispatch({ type: SET_MAP_STATE, data: MapStateEnum.TurnEnd })
+              }
+            >
+              Next turn
+            </Button>
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );

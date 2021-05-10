@@ -1,18 +1,35 @@
-import { calculatePartyInit, getBaseMap, getMapByState, handleTileClick } from "../../components/Map/MapFunctions";
-import { IMapState, MapStateEnum, mapPosition } from "../../components/Map/MapTypes";
+import { setActionForActiveChar } from "../../components/Map/MapFunctions/CharacterAction";
+import { calculatePartyInit, drawMap, getActiveChar, getBaseMap, getMapByState } from "../../components/Map/MapFunctions/MapFunctions";
+import { handleClick } from "../../components/Map/MapFunctions/TileClick";
+import { handleTurnEnd } from "../../components/Map/MapFunctions/TurnEndActions";
+import { IMapState, MapStateEnum, mapPosition, IActionPlan } from "../../components/Map/MapTypes";
 import { CharacterRef } from "../../types/globalTypes"
 import { ReducerInput } from "../store"
 
 export interface CharacterMatchState{
     character: CharacterRef,
+    color: string;
     position?: mapPosition,
+    affectedArea?: Array<mapPosition>,
     initiative?: number,
+    actionState: ActionStateEnum,
+    PlannedMove?: IActionPlan,
+}
+
+export enum ActionStateEnum {
+    noAction,
+    move,
+    attack
+}
+
+export const getActionStates = () => {
+    return Object.keys(ActionStateEnum).filter(key => isNaN(Number(key)) && key);
 }
 
 export interface IGameState {
     ongoingBattle: boolean;
     playerParty: Array<CharacterMatchState>;
-    activeCharacter: CharacterMatchState | undefined;
+    activeCharacter: string | undefined;
     map: IMapState;
 }
 
@@ -31,13 +48,15 @@ export const INIT_BATTLE = "INIT_BATTLE";
 export const CLICK_TILE = "CLICK_TILE";
 export const ACTIVATE_CHARACTER = "ACTIVATE_CHARACTER";
 export const SET_MAP_STATE = "SET_MAP_STATE";
+export const SETUP_ACTION = "SETUP_ACTION";
 
 export default (state: IGameState = initialState,  action: ReducerInput): IGameState => {
     switch (action.type) {
+        // Changes game state to be ready for battle actions
         case START_BATTLE:
             let newPartyData: Array<CharacterMatchState> = [];
-            action.data.forEach((obj: CharacterRef) => {
-                newPartyData.push({character: obj});
+            action.data.forEach((obj: CharacterRef, i: number) => {
+                newPartyData.push({character: obj, actionState: ActionStateEnum.noAction, color: getColor(i)});
             })
             
             return {
@@ -45,39 +64,66 @@ export default (state: IGameState = initialState,  action: ReducerInput): IGameS
                 ongoingBattle: true,
                 playerParty: newPartyData,
                 map: {
-                    baseMap: getMapByState(MapStateEnum.SelectStartPosition, state.map.baseMap),
+                    baseMap: drawMap({...state, map:{...state.map, mapState: MapStateEnum.SelectStartPosition}}),
                     mapState: MapStateEnum.SelectStartPosition
                 }
             }
-
-        case SET_MAP_STATE:
+        
+        // Sets maps state and changes game state by the action
+        case SET_MAP_STATE:{
             let newParty = [...state.playerParty];
             switch(action.data){
                 case MapStateEnum.TurnAction:
                     newParty = calculatePartyInit(state.playerParty);
+                    break;
+                case MapStateEnum.TurnEnd:
+                    return handleTurnEnd(state);
             }
             return{
                 ...state,
                 playerParty: newParty,
                 map:{
-                    baseMap: getMapByState(action.data, state.map.baseMap),
+                    baseMap: drawMap({...state, map:{...state.map, mapState: action.data}}),
                     mapState: action.data
                 }
-            }
+            }}
 
+    // Resets battle to initial state
     case INIT_BATTLE:
             return initialState;
 
+    // Activates character to state
     case ACTIVATE_CHARACTER:
             return {
                 ...state,
-                activeCharacter: state.activeCharacter?.character.name === action.data.character?.name ? undefined : action.data
+                activeCharacter: state.activeCharacter === action.data ? undefined : action.data
             }
 
+    // Handles tile click and all its actions
     case CLICK_TILE:
-        return handleTileClick(state, action.data);
+        return handleClick(state, action.data);
+
+    // Selects action for activated character. Mutates state based on that
+    case SETUP_ACTION:
+        return setActionForActiveChar(state, action.data);
 
     default:
         return state
+    }
+}
+
+// Just for testing - assigns color for each character
+const getColor = (i: number): string => {
+    switch(i){
+        case 0:
+            return "#eb4034"
+        case 1:
+            return "#c0eb34"
+        case 2: 
+            return "#34ebd9"
+        case 3:
+            return "#e234eb"
+        default:
+            return "white"
     }
 }

@@ -1,7 +1,12 @@
 import { Button, Card, Grid, makeStyles, Tooltip } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SET_MAP_STATE } from "../../GlobalState/Reducers/GameStateReducer";
+import {
+  ActionStateEnum,
+  getActionStates,
+  SETUP_ACTION,
+  SET_MAP_STATE,
+} from "../../GlobalState/Reducers/GameStateReducer";
 import { IRootState, ReducerInput } from "../../GlobalState/store";
 import { MapStateEnum } from "../Map/MapTypes";
 import fill from "lodash/fill";
@@ -57,6 +62,24 @@ export const BattleButtons = () => {
           dispatchData: { type: SET_MAP_STATE, data: MapStateEnum.TurnAction },
         });
         break;
+      case MapStateEnum.TurnAction:
+        const turnActions = getActionStates();
+        let newButtonOptions: Array<BattleButtonsOptions> = turnActions.map(
+          (action) => {
+            let actionEnum = action as keyof typeof ActionStateEnum;
+            let newButtonOption: BattleButtonsOptions = {
+              buttonText: action,
+              disabled: false,
+              tooltip: "",
+              dispatchData: {
+                type: SETUP_ACTION,
+                data: ActionStateEnum[actionEnum],
+              },
+            };
+            return newButtonOption;
+          }
+        );
+        setbuttonOptions(newButtonOptions);
     }
   }, [gameState.map.mapState]);
 
