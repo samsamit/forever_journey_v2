@@ -21,6 +21,11 @@ So the idea i got was to create a dream game using only a web type language. On 
 - Now the database is setup and ready for the application. 
 - Then just run `npm start` and the site is up and running
 - Now you need to just signup and login
+- After login go to home page and click "Make me admin" button to get admin privilidges
+- If you want to test the game you need to create maximum of 4 characters from admin page
+- Then create a party in the home page and assign the characters to the party
+- Then you can go to adventure page and start testing
+- For now you can only select a moving position to the character and press next turn to move all the characters
 
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
