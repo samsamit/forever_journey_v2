@@ -39,7 +39,6 @@ export const getMapByState = ({baseMap, mapState}: IMapState): MapType => {
            for(let i = 0; i < mapStartAreaHeight; i++){
                 for(let j = 0; j < C_mapSize; j++){
                     let newTile: ITile = {...getInitTile(), state: TileStateEnum.moveChar};
-                    console.log(newTile);
                     newMap[(C_mapSize - 1) - i][j] = newTile;
                 }
             } 
@@ -107,7 +106,6 @@ export const clearMap = (map: MapType, charName?: string | null): MapType => {
 }
 
 export const drawMap = (gameState: IGameState): MapType => {
-    console.log("Map redrawn...");
     const {playerParty, map, activeCharacter} = gameState;
     const activeChar = getActiveChar(activeCharacter, playerParty)
     let newMap = getMapByState(map);
@@ -115,6 +113,7 @@ export const drawMap = (gameState: IGameState): MapType => {
     newMap = drawPlayerPlansToMap(newMap, playerParty, activeChar);
     return newMap;
 }
+
 const drawPlayerToMap = (map: MapType, players: CharacterMatchState[]): MapType => {
     players.forEach(char => {
         if(!char.position) return;
