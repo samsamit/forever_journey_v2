@@ -6,6 +6,7 @@ import {
 } from "../../GlobalState/Reducers/GameStateReducer";
 import { IRootState } from "../../GlobalState/store";
 import { getTileColor } from "./MapFunctions/MapFunctions";
+import { getTileIndex } from "./MapFunctions/TileClick";
 import { ITile, TileStateEnum } from "./MapTypes";
 
 const useStyles = makeStyles({
@@ -49,7 +50,10 @@ export const BaseMap = (props: IProps) => {
   );
 
   const tileClicked = (e: any) => {
-    dispatch({ type: CLICK_TILE, data: e.target.id });
+    e.preventDefault();
+    let { x, y } = getTileIndex(e.target.id);
+    if (e.type === "contextmenu") console.log(map.baseMap[x][y]);
+    else dispatch({ type: CLICK_TILE, data: e.target.id });
   };
 
   const getCharacterGameData = (name: string): CharacterMatchState => {
@@ -69,6 +73,7 @@ export const BaseMap = (props: IProps) => {
             key={j}
             className={classes.tile}
             onClick={tileClicked}
+            onContextMenu={tileClicked}
             id={`${i},${j}`}
             style={{
               backgroundColor: `${getBgColor(tile)}`,

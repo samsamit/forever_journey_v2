@@ -21,15 +21,14 @@ interface IProps {}
 export const CharacterList = (props: IProps) => {
   const classes = useStyle();
   const user = useSelector((state: IRootState) => state.user.userInfo!);
-  const { parties, characters } = user;
-  if (!parties || !characters) return <p>Loading...</p>;
+  if (!user) return <p>Loading...</p>;
   return (
     <>
       <Card className={classes.partyCard}>
         <AddPartyButton User={user} variant="big" />
       </Card>
 
-      {parties?.map((party, i) => (
+      {user?.parties?.map((party, i) => (
         <Card key={i} className={classes.partyCard}>
           <CardHeader
             title={party}
@@ -37,7 +36,7 @@ export const CharacterList = (props: IProps) => {
               <DeletePartyButton username={user.username!} partyName={party!} />
             }
           />
-          {characters?.map((char, j) => {
+          {user?.characters?.map((char, j) => {
             if (char?.party === party)
               return <CharacterCard key={j} character={char} />;
           })}
@@ -45,7 +44,7 @@ export const CharacterList = (props: IProps) => {
       ))}
       <Card className={classes.partyCard}>
         <CardHeader title="Characters without party" />
-        {characters?.map((char, i) => {
+        {user?.characters?.map((char, i) => {
           if (char && !char.party)
             return <CharacterCard key={i} character={char} />;
         })}

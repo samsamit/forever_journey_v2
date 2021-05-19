@@ -39,9 +39,6 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "dgraph": "docker run -it -p 8080:8080 dgraph/standalone:master",
     "dgraphLambda": "docker run -d -it --rm -p 8686:8686 -v dgraphLambdaScripts.js:/app/script.js -e DGRAPH_URL=http://host.docker.internal:8080 dgraph/dgraph-lambda",
     "typegen": "apollo codegen:generate --endpoint=http://localhost:8080/graphql  --target=typescript --includes=\"src/controllers/**/*.{ts, tsx}\" --outputFlat src/types",
     "schema": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./dgraphSchema.ps1",

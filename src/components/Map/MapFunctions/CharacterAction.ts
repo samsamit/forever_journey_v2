@@ -8,9 +8,11 @@ import { handleTilesInArea } from "./TileClick";
 export const setActionForActiveChar = (GameState: IGameState, newAction: ActionStateEnum): IGameState => {
     const newGameState: IGameState = cloneDeep(GameState);
     const {activeCharacter, playerParty} = newGameState;
-    const targetCharInbdex = playerParty.findIndex(char => char.character.name === activeCharacter);
-    newGameState.playerParty[targetCharInbdex].actionState = newAction;
-    newGameState.map.baseMap = mutateMapByAction(newGameState.map.baseMap, playerParty);
+    const targetCharIndex = playerParty.findIndex(char => char.character.name === activeCharacter);
+    if(targetCharIndex >= 0){
+        newGameState.playerParty[targetCharIndex].actionState = newAction;
+        newGameState.map.baseMap = mutateMapByAction(newGameState.map.baseMap, playerParty);
+    }
     return newGameState;
 }
 

@@ -41,25 +41,8 @@ export const CharacterBattleCard = ({
     dispatch({ type: ACTIVATE_CHARACTER, data: characterData.character.name });
   };
 
-  const getBgColor = () => {
-    if (charActive) return "green";
-    if (!charActive) return "white";
-  };
-
-  const selectedStyle = (color: string | undefined) => {
-    return !color || color === "white"
-      ? { border: "0px" }
-      : {
-          border: "2px solid",
-          borderColor: color,
-        };
-  };
   return (
-    <Card
-      className={classes.root}
-      onClick={clickCard}
-      style={selectedStyle(getBgColor())}
-    >
+    <Card className={classes.root} onClick={clickCard}>
       <Grid
         className={classes.gridBorder}
         style={{

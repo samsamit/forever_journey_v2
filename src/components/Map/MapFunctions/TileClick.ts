@@ -44,9 +44,7 @@ export const handleClick = (state: IGameState, clickPosition: string): IGameStat
         }
     }
 
-    console.log(modifiedGameState);
-
-    baseMap = drawMap(modifiedGameState)
+    baseMap = drawMap(modifiedGameState);
     return modifiedGameState;
 }
 
@@ -60,20 +58,23 @@ const makeActionPlan = (action: ActionStateEnum, position: mapPosition) => {
 
 const tileIsAvailableForAction = (charName: string | undefined, action: ActionStateEnum, tile: ITile) => {
     if(!charName) return false;
-    let available: boolean = true;
+    let available: boolean = false;
     
     switch(action){
         case ActionStateEnum.move:
             available = tile.allyAffectors?.length === 0;
+            console.log(tile.allyAffectors?.length);
             break;
         default:
+            available = tile.availableToPlayer.includes(charName);
             break;
     }
-    available = tile.availableToPlayer.includes(charName);
+    
+    console.log('tileAvailableForAction ' + available);
     return available;
 }
  
-const getTileIndex = (tileId: string): mapPosition => {
+export const getTileIndex = (tileId: string): mapPosition => {
     const indexes = tileId.split(',');
     return {x: Number(indexes[0]), y: Number(indexes[1])}
 }
