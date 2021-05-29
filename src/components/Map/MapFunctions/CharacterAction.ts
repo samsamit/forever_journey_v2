@@ -25,9 +25,11 @@ const mutateMapByAction = (map: MapType, party: Array<CharacterMatchState>): Map
                 newMap = clearMap(newMap, char.character.name);
                 break;
             case ActionStateEnum.move:
+                newMap = clearMap(newMap, char.character.name);
                 newMap = handleTilesInArea(char.position, char.character.attributes?.mov, newMap, TileStateEnum.moveChar, char);
                 break;
             case ActionStateEnum.attack:
+                newMap = clearMap(newMap, char.character.name);
                 newMap = handleTilesInArea(char.position, 1, newMap, TileStateEnum.active, char);
                 break;
             default:

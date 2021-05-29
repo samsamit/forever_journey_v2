@@ -8,6 +8,7 @@ export const handleTurnEnd = (state: IGameState): IGameState => {
     const {players} = modifiedGameState;
     const planStack = GetPlanStack(players);
     modifiedGameState.players = triggerPlanStack(planStack, modifiedGameState.players);
+    modifiedGameState.players = checkPlayerStatus(modifiedGameState.players);
     modifiedGameState.players = resetPlayers(modifiedGameState.players);
     modifiedGameState.activeCharacter = undefined;
     modifiedGameState.map.mapState = MapStateEnum.TurnAction;
@@ -57,7 +58,6 @@ const triggerPlanStack = (stack: Array<IPlanStack>, players: CharacterMatchState
                             let affector = getPlayerDataByName(players, i.planner);
                             if(affector?.battleStats && char.currentStats){
                                 char.currentStats.hp! -= affector.battleStats.atk!;
-                                console.log(char.currentStats.hp!);
                             }else{
                                 console.log('No affector of currentStats');
                             }
@@ -67,6 +67,16 @@ const triggerPlanStack = (stack: Array<IPlanStack>, players: CharacterMatchState
                 })
                 break;
         }
+    })
+    return players;
+}
+
+const checkPlayerStatus = (players: CharacterMatchState[]): CharacterMatchState[] => {
+    players = players.filter(char => {
+        if(char?.currentStats?.hp && char?.currentStats?.hp <= 0){
+            return;
+        }
+        return char;
     })
     return players;
 }

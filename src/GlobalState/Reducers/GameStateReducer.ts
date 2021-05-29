@@ -63,13 +63,13 @@ export default (state: IGameState = initialState,  action: ReducerInput): IGameS
             action.data.forEach((obj: CharacterRef, i: number) => {
                 newPartyData.push({character: obj, battleStats: obj.attributes, isAi: false, currentStats: obj.attributes, actionState: ActionStateEnum.noAction, color: getColor(i)});
             })
-            
+            let newPlayers = union(newPartyData, generateEnemyParty(4))
             return {
                 ...state,
                 ongoingBattle: true,
-                players: union(newPartyData, generateEnemyParty(4)),
+                players: newPlayers,
                 map: {
-                    baseMap: drawMap({...state, map:{...state.map, mapState: MapStateEnum.SelectStartPosition}}),
+                    baseMap: drawMap({...state, players: newPlayers,  map:{...state.map, mapState: MapStateEnum.SelectStartPosition}}),
                     mapState: MapStateEnum.SelectStartPosition
                 }
             }

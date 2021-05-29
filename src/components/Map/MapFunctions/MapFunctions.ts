@@ -20,13 +20,11 @@ export const getBaseMap = (): MapType => {
 }
 
 export const getInitTile = (): ITile => {
-const initTile = {
+const initTile: ITile = {
     availableToPlayer: [],
     state: TileStateEnum.idle,
-    content: "",
     characterData: undefined,
-    allyAffectors: [],
-    enemyAffectors: [],
+    bgColors: [],
 }
 return initTile;
 }
@@ -49,7 +47,7 @@ export const getMapByState = ({baseMap, mapState}: IMapState): MapType => {
                 let newTile = tile;
                 newTile.state = TileStateEnum.idle;
                 newTile.availableToPlayer = [];
-                newTile.bgColor = undefined;
+                newTile.bgColors = [];
                 newTile.characterData = undefined;
                 return newTile;
             }));
@@ -132,10 +130,10 @@ const drawPlayerPlansToMap = (map: MapType, players: CharacterMatchState[], acti
             const {x,y} = char.PlannedMove.targetPosition;
             switch(char.PlannedMove.targetAction){
                 case ActionStateEnum.attack:
-                    if(activeCharacter) map[x][y].bgColor = char.color;
+                    if(activeCharacter) map[x][y].bgColors.push(char.color);
                     break;
                 case ActionStateEnum.move:
-                    if(activeCharacter) map[x][y].bgColor = char.color;
+                    if(activeCharacter) map[x][y].bgColors.push(char.color);
                     break;
                 default:
                     break;

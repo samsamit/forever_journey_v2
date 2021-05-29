@@ -68,7 +68,7 @@ const tileIsAvailableForAction = (charName: string | undefined, action: ActionSt
     
     switch(action){
         case ActionStateEnum.move:
-            available = !tile.characterData;
+            available = !tile.characterData && tile.availableToPlayer.includes(charName);
             break;
         case ActionStateEnum.noAction:
             available = false;
@@ -78,7 +78,7 @@ const tileIsAvailableForAction = (charName: string | undefined, action: ActionSt
             break;
     }
     
-    console.log('tileAvailableForAction ' + available);
+    console.log('tileAvailableForAction ' + available + ' ' + ActionStateEnum[action]);
     return available;
 }
  

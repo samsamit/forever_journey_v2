@@ -13,7 +13,7 @@ export interface ITile{
     characterData?: CharacterMatchState;
     availableToPlayer: Array<string>; //Draws player color to map
     state: TileStateEnum;
-    bgColor?: string;
+    bgColors: Array<string>;
 }
 export interface mapPosition{
     x: number,

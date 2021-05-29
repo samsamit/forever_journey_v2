@@ -1,16 +1,12 @@
 import { Avatar, makeStyles, useTheme } from "@material-ui/core";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  CharacterMatchState,
-  CLICK_TILE,
-} from "../../GlobalState/Reducers/GameStateReducer";
+import { CLICK_TILE } from "../../GlobalState/Reducers/GameStateReducer";
 import { IRootState } from "../../GlobalState/store";
-import { AttributesRef, CharacterRef } from "../../types/globalTypes";
 import { BarIndicator } from "../util/BarIndicator";
 import { getTileColor } from "./MapFunctions/MapFunctions";
 import { getTileIndex } from "./MapFunctions/TileClick";
-import { ITile, TileStateEnum } from "./MapTypes";
+import { ITile } from "./MapTypes";
 
 const useStyles = makeStyles({
   container: {
@@ -67,7 +63,16 @@ export const BaseMap = (props: IProps) => {
   };
 
   const getBgColor = (tile: ITile) => {
-    return tile.bgColor ? tile.bgColor : getTileColor(tile.state);
+    if (tile.bgColors.length === 0) return getTileColor(tile.state);
+    let percent = Math.round(100 / tile.bgColors.length);
+    let baseColorText = "";
+    tile.bgColors.forEach((color, i) => {
+      baseColorText += `linear-gradient(45deg, ${color} ${
+        percent * (i + 1)
+      }%, rgba(0, 0, 0, 0) ${percent * (i + 1)}%),`;
+    });
+    baseColorText = baseColorText.slice(0, -1);
+    return baseColorText;
   };
 
   const mapTiles = map.baseMap.map((row, i) => (
@@ -82,7 +87,7 @@ export const BaseMap = (props: IProps) => {
             onContextMenu={tileClicked}
             id={`${i},${j}`}
             style={{
-              backgroundColor: `${getBgColor(tile)}`,
+              background: `${getBgColor(tile)}`,
             }}
           >
             {charData?.character?.avatarPath && (

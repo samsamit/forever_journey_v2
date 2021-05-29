@@ -23,8 +23,8 @@ export const generateEnemyParty = (
     let newEnemy: CharacterMatchState = {
       character: baseCharacter,
       isAi: true,
-      battleStats: baseCharacter.attributes,
-      currentStats: baseCharacter.attributes,
+      battleStats: { ...baseCharacter.attributes },
+      currentStats: { ...baseCharacter.attributes },
       color: "black",
       actionState: ActionStateEnum.noAction,
       position: {
