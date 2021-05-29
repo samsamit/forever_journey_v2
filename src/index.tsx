@@ -17,6 +17,8 @@ import { store } from "./GlobalState/store";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
+import { ThemeProvider } from "@material-ui/core/styles";
+import { theme } from "./globalTheme";
 
 const httpLink = createHttpLink({
   uri: "http://localhost:8080/graphql",
@@ -59,7 +61,9 @@ ReactDOM.render(
       <PersistGate loading={null} persistor={persistor}>
         <SnackbarProvider maxSnack={5} preventDuplicate>
           <Router>
-            <App />
+            <ThemeProvider theme={theme}>
+              <App />
+            </ThemeProvider>
           </Router>
         </SnackbarProvider>
       </PersistGate>

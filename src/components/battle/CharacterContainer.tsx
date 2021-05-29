@@ -10,7 +10,7 @@ export const CharacterContainer = (props: IProps) => {
   const gameState = useSelector((state: IRootState) => state.gameState);
   const activeCharacterData = getActiveChar(
     gameState.activeCharacter,
-    gameState.playerParty
+    gameState.players
   );
   if (!gameState.activeCharacter) {
     return (
@@ -21,9 +21,10 @@ export const CharacterContainer = (props: IProps) => {
         alignItems="center"
         spacing={2}
       >
-        {gameState.playerParty.map(
+        {gameState.players.map(
           (data, i) =>
-            data && (
+            data &&
+            !data.isAi && (
               <Grid item key={i} sm={4} xs={12}>
                 <CharacterBattleCard characterData={data} variant="compact" />
               </Grid>

@@ -42,7 +42,7 @@ export const ValueChangerButton = (props: IProps) => {
 
   const valueChanged = (newValue: number) => {
     setvalue(newValue);
-    handleChange(value);
+    handleChange(newValue);
   };
 
   return (

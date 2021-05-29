@@ -50,8 +50,6 @@ export const getMapByState = ({baseMap, mapState}: IMapState): MapType => {
                 newTile.state = TileStateEnum.idle;
                 newTile.availableToPlayer = [];
                 newTile.bgColor = undefined;
-                newTile.allyAffectors = [];
-                newTile.enemyAffectors = [];
                 newTile.characterData = undefined;
                 return newTile;
             }));
@@ -106,11 +104,11 @@ export const clearMap = (map: MapType, charName?: string | null): MapType => {
 }
 
 export const drawMap = (gameState: IGameState): MapType => {
-    const {playerParty, map, activeCharacter} = gameState;
-    const activeChar = getActiveChar(activeCharacter, playerParty)
+    const {players, map, activeCharacter} = gameState;
+    const activeChar = getActiveChar(activeCharacter, players)
     let newMap = getMapByState(map);
-    newMap = drawPlayerToMap(newMap, playerParty);
-    newMap = drawPlayerPlansToMap(newMap, playerParty, activeChar);
+    newMap = drawPlayerToMap(newMap, players);
+    newMap = drawPlayerPlansToMap(newMap, players, activeChar);
     return newMap;
 }
 
@@ -132,12 +130,11 @@ const drawPlayerPlansToMap = (map: MapType, players: CharacterMatchState[], acti
         if(!char.PlannedMove) return;
         if(char.PlannedMove.targetPosition){
             const {x,y} = char.PlannedMove.targetPosition;
-            map[x][y].characterData = undefined;
             switch(char.PlannedMove.targetAction){
                 case ActionStateEnum.attack:
+                    if(activeCharacter) map[x][y].bgColor = char.color;
                     break;
                 case ActionStateEnum.move:
-                    map[x][y].allyAffectors.push(char.character.name!);
                     if(activeCharacter) map[x][y].bgColor = char.color;
                     break;
                 default:

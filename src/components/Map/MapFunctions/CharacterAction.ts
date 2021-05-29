@@ -7,11 +7,11 @@ import { handleTilesInArea } from "./TileClick";
 
 export const setActionForActiveChar = (GameState: IGameState, newAction: ActionStateEnum): IGameState => {
     const newGameState: IGameState = cloneDeep(GameState);
-    const {activeCharacter, playerParty} = newGameState;
-    const targetCharIndex = playerParty.findIndex(char => char.character.name === activeCharacter);
+    const {activeCharacter, players} = newGameState;
+    const targetCharIndex = players.findIndex(char => char.character.name === activeCharacter);
     if(targetCharIndex >= 0){
-        newGameState.playerParty[targetCharIndex].actionState = newAction;
-        newGameState.map.baseMap = mutateMapByAction(newGameState.map.baseMap, playerParty);
+        newGameState.players[targetCharIndex].actionState = newAction;
+        newGameState.map.baseMap = mutateMapByAction(newGameState.map.baseMap, players);
     }
     return newGameState;
 }
@@ -25,7 +25,7 @@ const mutateMapByAction = (map: MapType, party: Array<CharacterMatchState>): Map
                 newMap = clearMap(newMap, char.character.name);
                 break;
             case ActionStateEnum.move:
-                newMap = handleTilesInArea(char.position, 1, newMap, TileStateEnum.moveChar, char);
+                newMap = handleTilesInArea(char.position, char.character.attributes?.mov, newMap, TileStateEnum.moveChar, char);
                 break;
             case ActionStateEnum.attack:
                 newMap = handleTilesInArea(char.position, 1, newMap, TileStateEnum.active, char);

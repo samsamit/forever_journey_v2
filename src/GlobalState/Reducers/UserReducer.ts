@@ -34,7 +34,7 @@ export default (state: IUserState = initialState,  action: ReducerInput): IUserS
         return initialState
     
     case UPDATE_CHARACTER:
-        const updatedCharacter: CharacterRef = action.data;
+        const updatedCharacter: CharacterRef = action.data[0];
         const newCharacters = state.userInfo?.characters && state.userInfo.characters.map(char => 
             (char && char.id === updatedCharacter.id) ? updatedCharacter : char
         );

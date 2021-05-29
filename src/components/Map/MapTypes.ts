@@ -11,9 +11,7 @@ export enum TileStateEnum{
 }
 export interface ITile{
     characterData?: CharacterMatchState;
-    allyAffectors: Array<string>;
-    enemyAffectors: Array<string>;
-    availableToPlayer: Array<string>;
+    availableToPlayer: Array<string>; //Draws player color to map
     state: TileStateEnum;
     bgColor?: string;
 }
@@ -40,4 +38,5 @@ export enum MapStateEnum{
 export interface IActionPlan{
     targetPosition?: mapPosition,
     targetAction: ActionStateEnum,
+    affectedPlayers: Array<string>,
 }

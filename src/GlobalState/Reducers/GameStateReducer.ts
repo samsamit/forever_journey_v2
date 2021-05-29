@@ -1,16 +1,21 @@
+import { union } from "lodash";
+import { generateEnemyParty } from "../../components/battle/enemyLogic";
 import { setActionForActiveChar } from "../../components/Map/MapFunctions/CharacterAction";
 import { calculatePartyInit, drawMap, getActiveChar, getBaseMap, getMapByState } from "../../components/Map/MapFunctions/MapFunctions";
 import { handleClick } from "../../components/Map/MapFunctions/TileClick";
 import { handleTurnEnd } from "../../components/Map/MapFunctions/TurnEndActions";
 import { IMapState, MapStateEnum, mapPosition, IActionPlan } from "../../components/Map/MapTypes";
-import { CharacterRef } from "../../types/globalTypes"
+import { AttributesRef, CharacterRef } from "../../types/globalTypes"
 import { ReducerInput } from "../store"
 
 export interface CharacterMatchState{
     character: CharacterRef,
+    isAi: boolean,
+    battleStats?: AttributesRef | null | undefined;
+    currentStats?: AttributesRef | null | undefined;
     color: string;
     position?: mapPosition,
-    affectedArea?: Array<mapPosition>,
+    affectedArea?: Array<mapPosition>, //Enables draving movement options and attack range
     initiative?: number,
     actionState: ActionStateEnum,
     PlannedMove?: IActionPlan,
@@ -28,14 +33,14 @@ export const getActionStates = () => {
 
 export interface IGameState {
     ongoingBattle: boolean;
-    playerParty: Array<CharacterMatchState>;
+    players: Array<CharacterMatchState>;
     activeCharacter: string | undefined;
     map: IMapState;
 }
 
 const initialState: IGameState = {
     ongoingBattle: false,
-    playerParty: [],
+    players: [],
     activeCharacter: undefined,
     map:{
         baseMap: getBaseMap(),
@@ -56,13 +61,13 @@ export default (state: IGameState = initialState,  action: ReducerInput): IGameS
         case START_BATTLE:
             let newPartyData: Array<CharacterMatchState> = [];
             action.data.forEach((obj: CharacterRef, i: number) => {
-                newPartyData.push({character: obj, actionState: ActionStateEnum.noAction, color: getColor(i)});
+                newPartyData.push({character: obj, battleStats: obj.attributes, isAi: false, currentStats: obj.attributes, actionState: ActionStateEnum.noAction, color: getColor(i)});
             })
             
             return {
                 ...state,
                 ongoingBattle: true,
-                playerParty: newPartyData,
+                players: union(newPartyData, generateEnemyParty(4)),
                 map: {
                     baseMap: drawMap({...state, map:{...state.map, mapState: MapStateEnum.SelectStartPosition}}),
                     mapState: MapStateEnum.SelectStartPosition
@@ -71,17 +76,17 @@ export default (state: IGameState = initialState,  action: ReducerInput): IGameS
         
         // Sets maps state and changes game state by the action
         case SET_MAP_STATE:{
-            let newParty = [...state.playerParty];
+            let newParty = [...state.players];
             switch(action.data){
                 case MapStateEnum.TurnAction:
-                    newParty = calculatePartyInit(state.playerParty);
+                    newParty = calculatePartyInit(state.players);
                     break;
                 case MapStateEnum.TurnEnd:
                     return handleTurnEnd(state);
             }
             return{
                 ...state,
-                playerParty: newParty,
+                players: newParty,
                 map:{
                     baseMap: drawMap({...state, map:{...state.map, mapState: action.data}}),
                     mapState: action.data

@@ -19,8 +19,8 @@ import { CHARACTERS_EDIT } from "../../controllers/character/characterController
 import { UPDATE_CHARACTER } from "../../GlobalState/Reducers/UserReducer";
 import { IRootState } from "../../GlobalState/store";
 import {
+  editCharacter,
   editCharacterVariables,
-  editCharacter_updateCharacter,
 } from "../../types/editCharacter";
 import { CharacterPatch, CharacterRef } from "../../types/globalTypes";
 import { ValueChangerButton } from "../util/ValueChangerButton";
@@ -46,10 +46,8 @@ export const EditCharacterButton = (props: IProps) => {
     party: character.party,
   });
 
-  const [editChar, { loading, error, data }] = useMutation<
-    editCharacter_updateCharacter,
-    editCharacterVariables
-  >(CHARACTERS_EDIT);
+  const [editChar, { loading, error, data }] =
+    useMutation<editCharacter, editCharacterVariables>(CHARACTERS_EDIT);
 
   const onChange = (e: any) => {
     console.log(e.target.id);
@@ -95,8 +93,11 @@ export const EditCharacterButton = (props: IProps) => {
   ));
 
   useEffect(() => {
-    if (data) {
-      dispatch({ type: UPDATE_CHARACTER, data: data.character });
+    if (data?.updateCharacter) {
+      dispatch({
+        type: UPDATE_CHARACTER,
+        data: data.updateCharacter.character,
+      });
     }
   }, [data]);
 
